@@ -32,7 +32,7 @@
                             <nav class="nav">
                                 <ul class="ul-spacei">
                                     <li class="nav-item">
-                                        <nuxt-link to="inicio">Inicio</nuxt-link>
+                                        <nuxt-link to="/">Inicio</nuxt-link>
                                     </li>
                                     <li class="nav-item">
                                         <nuxt-link to="establecimientos">Establecimientos</nuxt-link>
