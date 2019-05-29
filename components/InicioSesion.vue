@@ -80,6 +80,8 @@
 
 
 <script>
+
+const Cookie = process.client ? require('js-cookie') : undefined
     export default {
         name: 'Login',
         data() {
@@ -102,7 +104,7 @@
                 if (this.registrousername && this.validEmail(this.registroemail) && this.registropassword && this.registrorepassword) {
                     if (this.registrorepassword == this.registropassword) {
                         let currentObj = this;
-                        this.axios.post('https://dtodoaqui.pw/api/sign_up', {
+                        this.$axios.$post('https://dtodoaqui.pw/api/sign_up', {
                                 user: {
                                     username: this.registrousername,
                                     email: this.registroemail,
@@ -111,16 +113,27 @@
                                 }
                             })
                             .then(function(response) {
-                                currentObj.output = response.data;
-                                localStorage.token = response.data.jwt;
-                                console.log(atob(response.data.jwt.split(".")[1]));
-                                localStorage.user = atob(response.data.jwt.split(".")[1]);
+                                currentObj.output = response;
+                                console.log(response);
+                                localStorage.token = response.jwt;
+                                console.log(atob(response.jwt.split(".")[1]));
+                                localStorage.user = atob(response.jwt.split(".")[1]);
                                 //console.log(JSON.parse(atob(response.data.jwt.split(".")[1])));
                                 //console.log(JSON.parse(atob(response.data.jwt.split(".")[1])).sub);
-                                localStorage.userid = JSON.parse(atob(response.data.jwt.split(".")[1])).sub;
+
+                                const auth = {
+                                accessToken: localStorage.token,
+                                id: localStorage.userid
+                                }
+
+                                
+                                $nuxt.$store.commit('setAuth', auth) // mutating to store for client rendering
+                                Cookie.set('auth', auth) // saving token in cookie for server rendering
+                                $nuxt.$router.push('/inicio')
+                                /*localStorage.userid = JSON.parse(atob(response.data.jwt.split(".")[1])).sub;
                                 localStorage.setItem('access_token', localStorage.token) // store the token in localstorage
                                 localStorage.setItem('id', localStorage.userid)
-                                setTimeout("location.href='/'", 1000);
+                                setTimeout("location.href='/'", 1000);*/
                             })
                             .catch(function(error) {
                                 currentObj.output = error;
@@ -154,25 +167,35 @@
                     //console.log('Logeando');
                     var currentObjl = this;
                     console.log('Logeando');
-                    this.axios.post('https://dtodoaqui.pw/api/sign_in', {
+                    this.$axios.$post('https://dtodoaqui.pw/api/sign_in', {
                             'username': this.username,
                             'password': this.password
                         })
                         .then(function(response) {
+                            //console.log(response);
                             //console.log(response.data.jwt);
-                            localStorage.token = response.data.jwt;
-                            console.log(atob(response.data.jwt.split(".")[1]));
-                            localStorage.user = atob(response.data.jwt.split(".")[1]);
+                            localStorage.token = response.jwt;
+                            //console.log(atob(response.jwt.split(".")[1]));
+                            localStorage.user = atob(response.jwt.split(".")[1]);
                             //console.log(JSON.parse(atob(response.data.jwt.split(".")[1])));
                             //console.log(JSON.parse(atob(response.data.jwt.split(".")[1])).sub);
-                            localStorage.userid = JSON.parse(atob(response.data.jwt.split(".")[1])).sub;
-                            localStorage.setItem('access_token', localStorage.token) // store the token in localstorage
+                            localStorage.userid = JSON.parse(atob(response.jwt.split(".")[1])).sub;
+                            
+                            const auth = {
+                            accessToken: localStorage.token,
+                            id: localStorage.userid
+                            }
+
+                            
+                            $nuxt.$store.commit('setAuth', auth) // mutating to store for client rendering
+                            Cookie.set('auth', auth) // saving token in cookie for server rendering
+                            $nuxt.$router.push('/inicio')
+                           /* localStorage.setItem('access_token', localStorage.token) // store the token in localstorage
                             localStorage.setItem('id', localStorage.userid)
-                            setTimeout("location.href='/'", 1000);
+                            $nuxt.$router.push('/inicio');*/
                         })
                         .catch(function(error) {
-                            console.log(error.response);
-                            
+                            console.log(error);
                         })
                         .catch(function(error) {
                             this.errors.push('¡Intente con una cuenta válida!');

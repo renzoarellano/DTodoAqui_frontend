@@ -32,10 +32,10 @@
                             <nav class="nav">
                                 <ul class="ul-spacei">
                                     <li class="nav-item">
-                                        <router-link to="/">Inicio</router-link>
+                                        <nuxt-link to="inicio">Inicio</nuxt-link>
                                     </li>
                                     <li class="nav-item">
-                                        <router-link to="establecimientos">Establecimientos</router-link>
+                                        <nuxt-link to="establecimientos">Establecimientos</nuxt-link>
                                     </li>
                                     <!--li class="nav-item">
                                             <a href="">Noticias</a>
@@ -50,22 +50,22 @@
                         <nav class="nav">
                             <ul class="ul-spaced">
                                 <li>
-                                    <router-link class="btnFormEstablecimientos" to="registro_establecimiento">
+                                    <nuxt-link class="btnFormEstablecimientos" to="registro_establecimiento">
                                         <i class="fa fa-plus"></i> Agregar Establecimiento
-                                    </router-link>
+                                    </nuxt-link>
                                 </li>
                                 <li v-if="loggedIn" @click="logout()">
-                                    <router-link class="btnCerrarToken" to="inicio_sesion">
+                                    <nuxt-link class="btnCerrarToken" to="inicio_sesion">
                                         Cerrar sesion
-                                    </router-link>
+                                    </nuxt-link>
                                 </li>
                                 <li v-if="loggedIn">
-                                    <router-link class="btnIrProfile" to="profile_user">
+                                    <nuxt-link class="btnIrProfile" to="profile_user">
                                         <i class="far fa-user"></i> Mi Perfil
-                                    </router-link>
+                                    </nuxt-link>
                                 </li>
                                 <li v-if="!loggedIn">
-                                    <router-link to="inicio_sesion">Iniciar Sesión / Registrarme</router-link>
+                                    <nuxt-link to="inicio_sesion">Iniciar Sesión / Registrarme</nuxt-link>
                                 </li>
                             </ul>
                         </nav>
@@ -86,29 +86,29 @@
         <div id="subheader" v-bind:style="styleSubheader" class="d-block d-sm-block d-md-block d-lg-none d-xl-none col-md-12">
             <ul class="subnav-mobile">
                 <li v-if="loggedIn">
-                    <router-link class="btnIrProfile" to="profile_user">
+                    <nuxt-link class="btnIrProfile" to="profile_user">
                         <i class="far fa-user"></i> Mi Perfil
-                    </router-link>
+                    </nuxt-link>
                 </li>
                 <li>
-                    <router-link to="/">Inicio</router-link>
+                    <nuxt-link to="/">Inicio</nuxt-link>
                 </li>
                 <li>
-                    <router-link to="establecimientos">Establecimientos</router-link>
+                    <nuxt-link to="establecimientos">Establecimientos</nuxt-link>
                 </li>
                 <li>
-                    <router-link class="btnFormEstablecimientos" to="registro_establecimiento">
+                    <nuxt-link class="btnFormEstablecimientos" to="registro_establecimiento">
                         <i class="fa fa-plus"></i> Agregar Establecimiento
-                    </router-link>
+                    </nuxt-link>
                 </li>
                 <li v-if="!loggedIn">
-                    <router-link to="inicio_sesion">Iniciar Sesión / Registrarme</router-link>
+                    <nuxt-link to="inicio_sesion">Iniciar Sesión / Registrarme</nuxt-link>
                 </li>
     
                 <li v-if="loggedIn" @click="logout()">
-                    <router-link class="btnCerrarToken" to="inicio_sesion">
+                    <nuxt-link class="btnCerrarToken" to="inicio_sesion">
                         Cerrar sesion
-                    </router-link>
+                    </nuxt-link>
                 </li>
     
                 <!--li>
@@ -121,6 +121,8 @@
 </template>
 
 <script>
+import axios from "axios";
+const Cookie = process.client ? require('js-cookie') : undefined
 /*eslint-disable */
 export default {
     name: 'Header',
@@ -161,18 +163,16 @@ export default {
             }
         },
         logout() {
-            localStorage.removeItem('access_token')
-            localStorage.removeItem('id')
-            this.$store.state.accessToken = null;
-            this.$router.push({ name: 'inicio_sesion' });
+            Cookie.remove('auth')
+             this.$store.commit('setAuth', null)
+            //this.$store.state.accessToken = null;
+           $nuxt.$router.push('/inicio_sesion');
         },
     },
     computed: {
         loggedIn() {
-            //console.log(this.$store.getters.loggedIn);
-            //return this.$store.getters.loggedIn
+            return this.$store.getters.loggeIn;
         },
-
     }
 };
 </script>

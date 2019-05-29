@@ -28,7 +28,7 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    '~/css/style.css'
+    '~/css/style.css',
   ],
 
   /*
