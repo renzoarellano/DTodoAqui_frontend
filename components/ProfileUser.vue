@@ -296,7 +296,7 @@ Vue.use(vueCountryRegionSelect)
                     })
                     .catch(function(error) {
                         console.log(error);
-                    }) 
+                    }); 
                     }else{
                         this.direccion = result.address;
                         this.pais = result.country;
