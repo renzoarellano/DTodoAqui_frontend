@@ -191,7 +191,7 @@ export default {
     },
     computed: {
         loggedIn() {
-           return $nuxt.$store.getters.loggeIn;
+           return this.$store.getters.loggeIn;
         },
 
     }
