@@ -1,3 +1,28 @@
+@font-face{
+    font-family: 'muli_regular';
+    src: url('Muli-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face{
+    font-family: 'muli_light';
+    src: url('Muli-Light.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face{
+    font-family: 'muli_semibold';
+    src: url('Muli-SemiBold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face{
+    font-family: 'muli_bold';
+    src: url('Muli-Bold.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
 .np {
     padding-left: 0px;
     padding-right: 0px;
@@ -62,9 +87,9 @@ body {
     color: #ff1d47;
     font-size: 15px;
 }
-
+/*
 .header-color {
-    background-color: transparent;
+    background-color: white;
     padding-top: 10px;
     padding-bottom: 10px;
     transition: 0.4s all;
@@ -86,7 +111,7 @@ body {
     -moz-box-shadow: 0px -2px 20px -2px rgba(255,29,71,0.72);
     box-shadow: 0px -2px 20px -2px rgba(255,29,71,0.72);
 }
-
+*/
 .btnFormEstablecimientos {
     color: white;
     font-family: 'muli_semibold';

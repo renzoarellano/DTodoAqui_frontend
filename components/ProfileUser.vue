@@ -2,6 +2,17 @@
     <div class="espacioUser">
         <div class="container">
             <div class="row">
+                <div v-if="showError" class="col-12 col-md-11 col-lg-7 np position-alert text-center">
+                    <div class="alert alert-danger" role="alert">
+                        <p>
+                            <b>Porfavor corriga los siguientes errores: </b>
+                            <li v-for="error in errors">{{ error }}</li>
+                        </p>
+                        <button class="btnCerrarErrores" @click="showError = false">
+                             Cerrar ❌
+                        </button>
+                    </div>
+                </div>
                 <div class="backTopProfile col-12">
                     <div class="row">
                         <div class="pictureUser col-12 col-md-6">
@@ -16,7 +27,7 @@
                             </div>
                             <div class="col-12 text-center">
                                 <a target="_blank" class="iconRedes" v-bind:href="facebook">
-                                    <i class="fab fa-facebook-square"></i>
+                                    <img src="~/assets/facebook.png" alt="Facebook - DtodoAqui">
                                 </a>
                             </div>
                             <div class="col-12 text-justify posDescripcion">
@@ -95,27 +106,33 @@
                             <div class="form-group">
                                 <label for="phoneUser"><i class="fas fa-phone-square"></i> Teléfono: </label>
                                 <input type="text" v-model="telefono" class="inputProfile" aria-describedby="telefonoHelp" placeholder="Mi Teléfono" :disabled="!changeDatos">
+                                <small id="nameHelp" class="form-text text-muted">Este campo es obligatorio!.</small>
                             </div>
                             <div v-if="!changeDatos" class="form-group">
                                 <label for="paisUser"><i class="fas fa-grin-beam-sweat"></i> País: </label>
                                 <input type="text" v-model="pais" class="inputProfile" aria-describedby="paisHelp" placeholder="Mi Pais" :disabled="!changeDatos">
+                                <small id="nameHelp" class="form-text text-muted">Este campo es obligatorio!.</small>
                             </div>
                             <div class="form-group">
                                 <label for="paisUser"><i class="fas fa-grin-beam-sweat"></i> Dirección: </label>
                                 <input type="text" v-model="direccion" class="inputProfile" aria-describedby="direccionHelp" placeholder="Mi Dirección" :disabled="!changeDatos">
+                                <small id="nameHelp" class="form-text text-muted">Este campo es obligatorio!.</small>
                             </div>
                             <div v-if="changeDatos" class="col-12 np">
                                 <div class="form-group">
                                     <label for="paisUser"><i class="fas fa-globe"></i> País: </label>
                                     <country-select class="selectedStyle" v-model="country" :country="country" topCountry="" />
+                                    <small id="nameHelp" class="form-text text-muted">Este campo es obligatorio!.</small>
                                 </div>
                                 <div class="form-group">
                                     <label for="facebookUser"><i class="fas fa-grin-beam-sweat"></i> Link facebook: </label>
                                     <input type="text" v-model="facebook" class="inputProfile" aria-describedby="facebook" placeholder="Mi link de Facebook">
+                                    <small id="nameHelp" class="form-text text-muted">Opcional</small>
                                 </div>
                                 <div class="form-group">
                                     <label for="paisUser"><i class="fas fa-grin-beam-sweat"></i>Nueva Descripción: </label>
                                     <textarea @change="getdescripcionProfile"  class="inputProfile" rows="5" placeholder="Mi Descripción" v-bind:value="descripcion"></textarea>
+                                    <small id="nameHelp" class="form-text text-muted">Opcional</small>
                                 </div>
                                 <div class="col-12 text-center">
                                     <button type="submit" class="btnActualizar">Actualizar Datos</button>
@@ -130,6 +147,11 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import axios from 'axios'
+
+import vueCountryRegionSelect from 'vue-country-region-select'
+Vue.use(vueCountryRegionSelect)
     export default {
         name: 'ProfileUser',
         data() {
@@ -148,6 +170,8 @@
                 idprofile:'',
                 changePass: false,
                 changeDatos: false,
+                errors: [],
+                showError: false
             }
         },
         methods: {
@@ -160,6 +184,7 @@
             },
             cambiarDatos() {
                 this.changeDatos = true;
+                console.log(this.pais);
             },
             cancelarDatos() {
                 this.changeDatos = false;
@@ -169,9 +194,12 @@
             },
             formDatos(e) {
                 e.preventDefault();
-                this.axios.put('https://dtodoaqui.pw/api/profile'+'/'+this.idprofile, {
+                this.errors = [];
+                var UserId = this.$store.getters.loggeIn
+                if(this.nombres && this.apellidos && this.telefono && this.country && this.direccion){
+                    this.$axios.$put('https://dtodoaqui.xyz/api/profile'+'/'+this.idprofile, {
                         'profile': {
-                            'user_id': localStorage.getItem('id'),
+                            'user_id': UserId.id,
                             'avatar_name': 'prueba.jpg',
                             'first_name': this.nombres,
                             'last_name': this.apellidos,
@@ -183,48 +211,68 @@
                             'facebook': this.facebook,
                             'twitter': 'prueba.twit',
                             'linkedin': 'prueba.link',
-                            'created': '2019-10-29T20:12:30Z',
+                            /*'created': '2019-10-29T20:12:30Z',
                             'modified': '2019-10-29T20:12:30Z',
                             'inserted_at': '2019-10-29T20:12:30Z',
-                            'updated_at': '2019-10-29T20:12:30Z',
+                            'updated_at': '2019-10-29T20:12:30Z',*/
                         }
                     }).then(function(response) {
-                        if(response.data != null){
-                            location.reload();
+                        if(response != null){
+                            //alert('Sin errores');
+                             window.location.reload(true)
                         }
                     })
                     .catch(function(error) {
                         if(error){
-                            alert('Revise que todos los datos esten completos');
+                            alert(error.status);
                         }
-                    })
+                    });
+                }else{
+                    if(!this.nombres){
+                        this.errors.push('Nombres requeridos.');
+                    }
+                    if(!this.apellidos){
+                        this.errors.push('Apellidos requeridos.');
+                    }
+                    if(!this.telefono){
+                        this.errors.push('Teléfono requerido.');
+                    }
+                    if(!this.country){
+                        console.log(this.country);
+                        this.errors.push('País requerido.');
+                    }
+                    if(!this.direccion){
+                        this.errors.push('Dirección requerida.');
+                    }
+                    this.showError = true;
+                }
             },
             
          
         },
         created() {
-            let mytokenPromise = this.$store.getters.returnAcces;
-            //console.log(mytokenPromise);
+            let mytokenPromise = this.$store.getters.loggeIn;
+
             Promise.all([mytokenPromise]).then((vals) => {
-                this.axios.get('https://dtodoaqui.pw/api/my_user', {
+                this.$axios.$get('https://dtodoaqui.xyz/api/my_user', {
                     withCredentials: false,
                     headers: {
-                        'Authorization': 'Bearer ' + mytokenPromise
+                        'Authorization': 'Bearer ' + mytokenPromise.accessToken
                     }
                 }).then(result => {
-                    this.username = result.data.username;
+                    this.username = result.username;
                 });
             });
             Promise.all([mytokenPromise]).then((vals) => {
-                this.axios.get('https://dtodoaqui.pw/api/my_profile', {
+                this.$axios.$get('https://dtodoaqui.xyz/api/my_profile', {
                     withCredentials: false,
                     headers: {
-                        'Authorization': 'Bearer ' + mytokenPromise
+                        'Authorization': 'Bearer ' + mytokenPromise.accessToken
                     }
                 }).then(result => {
-                    console.log(result.data);
+                    //console.log(result);
                     if(result.data == ''){
-                        this.axios.post('https://dtodoaqui.pw/api/profile', {
+                        this.$axios.$post('https://dtodoaqui.xyz/api/profile', {
                         'profile': {
                             'user_id': localStorage.getItem('id'),
                             'avatar_name': 'prueba.jpg',
@@ -238,10 +286,10 @@
                             'facebook': 'Ingrese aquí tu link de facebook',
                             'twitter': 'prueba.twit',
                             'linkedin': 'prueba.link',
-                            'created': '2019-10-29T20:12:30Z',
+                            /*'created': '2019-10-29T20:12:30Z',
                             'modified': '2019-10-29T20:12:30Z',
                             'inserted_at': '2019-10-29T20:12:30Z',
-                            'updated_at': '2019-10-29T20:12:30Z',
+                            'updated_at': '2019-10-29T20:12:30Z',*/
                         }
                     }).then(function(response) {
                         console.log(response);
@@ -250,14 +298,14 @@
                         console.log(error);
                     }) 
                     }else{
-                        this.direccion = result.data.address;
-                        this.pais = result.data.country;
-                        this.descripcion = result.data.description;
-                        this.nombres = result.data.first_name;
-                        this.apellidos = result.data.last_name;
-                        this.facebook = result.data.facebook;
-                        this.telefono = result.data.phone;
-                        this.idprofile = result.data.id;
+                        this.direccion = result.address;
+                        this.pais = result.country;
+                        this.descripcion = result.description;
+                        this.nombres = result.first_name;
+                        this.apellidos = result.last_name;
+                        this.facebook = result.facebook;
+                        this.telefono = result.phone;
+                        this.idprofile = result.id;
                     }
                     /**/
                 });
@@ -422,5 +470,22 @@
         color: white;
         transition: 0.4s all;
         outline: none;
+    }
+
+    .position-alert {
+        position: fixed;
+        margin: auto;
+        z-index: 999;
+        top: 40%;
+    }
+    .btnCerrarErrores {
+        background-color: transparent;
+        outline: none;
+        border: 1px solid rgba(255, 29, 71, 1);
+        font-family: 'muli_bold';
+        padding: 10px 10px 10px 10px;
+        font-size: 15px;
+        color: rgba(255, 29, 71, 1);
+        border-radius: 20px;
     }
 </style>

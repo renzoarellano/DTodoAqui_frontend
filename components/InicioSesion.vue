@@ -2,15 +2,15 @@
     <div class="col-xs-12 np posSesion">
         <div class="container">
             <div class="row">
-                <div v-if="showError" class="col-12 col-md-11 col-lg-7 np position-alert">
+                <div v-if="showError" class="col-12 col-md-11 col-lg-7 np position-alert text-center">
                     <div class="alert alert-danger" role="alert">
                         <p>
                             <b>Porfavor corriga los siguientes errores: </b>
                             <li v-for="error in errors">{{ error }}</li>
                         </p>
                         <button class="btnCerrarErrores" @click="showError = false">
-                        Cerrar ❌
-                    </button>
+                             Cerrar ❌
+                        </button>
                     </div>
                 </div>
                 <div class="login-wrap">
@@ -104,7 +104,7 @@ const Cookie = process.client ? require('js-cookie') : undefined
                 if (this.registrousername && this.validEmail(this.registroemail) && this.registropassword && this.registrorepassword) {
                     if (this.registrorepassword == this.registropassword) {
                         let currentObj = this;
-                        this.$axios.$post('https://dtodoaqui.pw/api/sign_up', {
+                        this.$axios.$post('https://dtodoaqui.xyz/api/sign_up', {
                                 user: {
                                     username: this.registrousername,
                                     email: this.registroemail,
@@ -129,16 +129,18 @@ const Cookie = process.client ? require('js-cookie') : undefined
                                 
                                 $nuxt.$store.commit('setAuth', auth) // mutating to store for client rendering
                                 Cookie.set('auth', auth) // saving token in cookie for server rendering
-                                $nuxt.$router.push('/inicio')
+                                $nuxt.$router.push('/')
                                 /*localStorage.userid = JSON.parse(atob(response.data.jwt.split(".")[1])).sub;
                                 localStorage.setItem('access_token', localStorage.token) // store the token in localstorage
                                 localStorage.setItem('id', localStorage.userid)
                                 setTimeout("location.href='/'", 1000);*/
                             })
                             .catch(function(error) {
-                                currentObj.output = error;
-                                this.errors.push('Error en el servidor - Intente en otro momento');
-                                this.showError = true;
+                                if(error.response.status == 401){
+                                alert('Datos Ingresado NO válidos');
+                                }else if(error.response.status == 500){
+                                    alert('El servicio no funciona correctamente');
+                                }
                             });
                     } else {
                         this.errors.push('Reingrese correctamente su contraseña.');
@@ -167,7 +169,7 @@ const Cookie = process.client ? require('js-cookie') : undefined
                     //console.log('Logeando');
                     var currentObjl = this;
                     console.log('Logeando');
-                    this.$axios.$post('https://dtodoaqui.pw/api/sign_in', {
+                    this.$axios.$post('https://dtodoaqui.xyz/api/sign_in', {
                             'username': this.username,
                             'password': this.password
                         })
@@ -189,21 +191,19 @@ const Cookie = process.client ? require('js-cookie') : undefined
                             
                             $nuxt.$store.commit('setAuth', auth) // mutating to store for client rendering
                             Cookie.set('auth', auth) // saving token in cookie for server rendering
-                            $nuxt.$router.push('/inicio')
+                            $nuxt.$router.push('/')
                            /* localStorage.setItem('access_token', localStorage.token) // store the token in localstorage
                             localStorage.setItem('id', localStorage.userid)
                             $nuxt.$router.push('/inicio');*/
                         })
                         .catch(function(error) {
-                            console.log(error);
-                        })
-                        .catch(function(error) {
-                            this.errors.push('¡Intente con una cuenta válida!');
-                            this.showError = true;
-                            currentObjl.output = error.response;
-                            console.log(currentObjl.output);
+                            if(error.response.status == 401){
+                                alert('Datos Ingresado NO válidos');
+                            }else if(error.response.status == 500){
+                                 alert('El servicio no funciona correctamente');
+                            }
                         });
-                } else {
+                }else{
                     if (!this.username) {
                         this.errors.push('Username requerido.');
                     }

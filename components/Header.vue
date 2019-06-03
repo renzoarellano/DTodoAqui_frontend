@@ -51,7 +51,7 @@
                             <ul class="ul-spaced">
                                 <li>
                                     <nuxt-link class="btnFormEstablecimientos" to="registro_establecimiento">
-                                        <i class="fa fa-plus"></i> Agregar Establecimiento
+                                        + Agregar Establecimiento
                                     </nuxt-link>
                                 </li>
                                 <li v-if="loggedIn" @click="logout()">
@@ -178,6 +178,19 @@ export default {
 </script>
 
 <style>
+.header-color {
+    background-color: white !important;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    transition: 0.4s all;
+    position: fixed;
+    width: 100%;
+    z-index: 999;
+    transition: 0.4s all;
+    -webkit-box-shadow: 0px -2px 20px -2px rgba(255,29,71,0.72);
+    -moz-box-shadow: 0px -2px 20px -2px rgba(255,29,71,0.72);
+    box-shadow: 0px -2px 20px -2px rgba(255,29,71,0.72)
+}
 .change1 {
     opacity: 0;
     bottom: -10px;
