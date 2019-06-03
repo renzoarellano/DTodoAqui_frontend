@@ -1,5 +1,5 @@
 <template>
-  <div class="establecimientos">
+  <div>
     <SearchHeader />  
     <BannerEstablecimiento />
     <div class="container">
@@ -32,7 +32,6 @@ export default {
     BannerEstablecimiento,
     Establecimiento,
     Footer,
-
   }
 };
 </script>
