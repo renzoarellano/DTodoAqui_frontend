@@ -222,7 +222,7 @@ export default {
                 reader.onload = (event) => {
                     this.imgSrc = event.target.result
                     this.fotosFile = this.imgSrc;
-                    //console.log(this.fotosFile);
+                    console.log(this.fotosFile);
                 }
                 reader.readAsDataURL(file)
             } else {
@@ -232,7 +232,7 @@ export default {
         onFotosFile(event) {
             this.fotosFile = event.target.files[0];
            //Activar esta funcion para pasar la imagen a database64 !importante
-           //this.setImage(this.fotosFile);
+           this.setImage(this.fotosFile);
 
         },
         getLatandLong(url){
