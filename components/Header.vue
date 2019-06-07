@@ -164,8 +164,8 @@ export default {
         },
         logout() {
             Cookie.remove('auth')
-             this.$store.commit('setAuth', null)
-            //this.$store.state.accessToken = null;
+            this.$store.commit('setAuth', null)
+            //console.log(this.$store.getters.loggeIn);
            $nuxt.$router.push('/inicio_sesion');
         },
     },

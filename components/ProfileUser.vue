@@ -167,6 +167,7 @@ Vue.use(vueCountryRegionSelect)
             return {
                 fotosFile: '',
                 username: '',
+                userID: '',
                 cpassword: '',
                 crepassword: '',
                 nombres: '',
@@ -227,7 +228,7 @@ Vue.use(vueCountryRegionSelect)
             },
             cambiarDatos() {
                 this.changeDatos = true;
-                console.log(this.pais);
+                //console.log(this.pais);
             },
             cancelarDatos() {
                 this.changeDatos = false;
@@ -242,7 +243,7 @@ Vue.use(vueCountryRegionSelect)
                 if(this.nombres && this.apellidos && this.telefono && this.country && this.direccion){
                     this.$axios.$put('https://dtodoaqui.xyz/api/profile'+'/'+this.idprofile, {
                         'profile': {
-                            'user_id': UserId.id,
+                            'user_id': parseInt(UserId.id),
                             'avatar_name': 'prueba.jpg',
                             'first_name': this.nombres,
                             'last_name': this.apellidos,
@@ -252,8 +253,8 @@ Vue.use(vueCountryRegionSelect)
                             'phone': this.telefono,
                             'website': 'prueba.web',
                             'facebook': this.facebook,
-                            'twitter': 'prueba.twit',
-                            'linkedin': 'prueba.link',
+                            //'twitter': 'prueba.twit',
+                            //'linkedin': 'prueba.link',
                             /*'created': '2019-10-29T20:12:30Z',
                             'modified': '2019-10-29T20:12:30Z',
                             'inserted_at': '2019-10-29T20:12:30Z',
@@ -281,7 +282,7 @@ Vue.use(vueCountryRegionSelect)
                         this.errors.push('Teléfono requerido.');
                     }
                     if(!this.country){
-                        console.log(this.country);
+                        //console.log(this.country);
                         this.errors.push('País requerido.');
                     }
                     if(!this.direccion){
@@ -303,10 +304,12 @@ Vue.use(vueCountryRegionSelect)
                         'Authorization': 'Bearer ' + mytokenPromise.accessToken
                     }
                 }).then(result => {
-                    this.username = result.username;
+                    this.username = result.username
+                    this.userID = result.id;
                 });
             });
             Promise.all([mytokenPromise]).then((vals) => {
+                //console.log(mytokenPromise.accessToken);
                 this.$axios.$get('https://dtodoaqui.xyz/api/my_profile', {
                     withCredentials: false,
                     headers: {
@@ -314,10 +317,11 @@ Vue.use(vueCountryRegionSelect)
                     }
                 }).then(result => {
                     //console.log(result);
-                    if(result.data == ''){
+                    if(result == ''){
+                        alert('no hubo data');
                         this.$axios.$post('https://dtodoaqui.xyz/api/profile', {
                         'profile': {
-                            'user_id': localStorage.getItem('id'),
+                            'user_id': this.userID,
                             'avatar_name': 'prueba.jpg',
                             'first_name': 'Mi Nombre',
                             'last_name': 'Mi Apellido',
@@ -327,15 +331,15 @@ Vue.use(vueCountryRegionSelect)
                             'phone': '999999999',
                             'website': 'prueba.web',
                             'facebook': 'Ingrese aquí tu link de facebook',
-                            'twitter': 'prueba.twit',
-                            'linkedin': 'prueba.link',
+                            //'twitter': 'prueba.twit',
+                            //'linkedin': 'prueba.link',
                             /*'created': '2019-10-29T20:12:30Z',
                             'modified': '2019-10-29T20:12:30Z',
                             'inserted_at': '2019-10-29T20:12:30Z',
                             'updated_at': '2019-10-29T20:12:30Z',*/
                         }
                     }).then(function(response) {
-                        console.log(response);
+                        window.location.reload(true)
                     })
                     .catch(function(error) {
                         console.log(error);
