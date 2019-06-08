@@ -2,17 +2,17 @@
     <div class="col-12 np">
         <div class="row">
             <div class="col-12 col-sm-5 np">
-                <img class="img-responsive" src="" alt="">
+                <img class="img-responsive" :src="imagen" alt="Establecimiento - DtodoAqui">
             </div>
             <div class="col-12 col-sm-7 text-left">
                 <div class="col-12 titleEstablecimiento">
                     <h4>
-                        <a href="#">Ejemplo Establecimiento 2</a>
+                        <nuxt-link :to="'establecimientos/'+ id"> {{title}} </nuxt-link>
                     </h4>
                 </div>
                 <div class="col-12  direccionEstablecimiento">
                     <h6>
-                        Av. Es un ejemplo 265 Jr.
+                       {{ direccion }}
                     </h6>
                 </div>
                 <div class="col ratingEstablecimiento">
@@ -28,13 +28,18 @@
                     </p>
                 </div>
                 <div class="col-12 keywordEstablecimiento ">
-                    <a href="#">Keyword1</a>,
-                    <a href="#">Keyword2</a>,
-                    <a href="#">Keyword3</a>
+                    <li class="posKeywords" v-for="key in keywords" :key="key.id">
+                        <nuxt-link :to="'establecimiento/' + key.name">
+                        {{key.name}}
+                        </nuxt-link>
+                    </li>
+                </div>
+                <div>
+                    {{keywords}}
                 </div>
                 <div class="col-12 descripcionEstablecimiento text-justify">
                     <p>
-                        <span> Descripción: </span> <br> Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum
+                        <span> Descripción: </span> <br> {{descripcion}}
                     </p>
                 </div>
             </div>
@@ -45,6 +50,14 @@
 <script>
 export default {
     name: 'Establecimiento',
+    props:{
+        id: String,
+        imagen:String,
+        title:String,
+        direccion:String,
+        keywords:String,
+        descripcion:String
+    }
 }
 </script>
 
@@ -59,6 +72,10 @@ export default {
     color: #232323;
     font-family: 'muli_regular';
     font-size: 12px;
+}
+.posKeywords{
+    float:left;
+    list-style: none;
 }
 </style>
 

@@ -6,7 +6,7 @@
                     <div class="alert alert-danger" role="alert">
                         <p>
                             <b>Porfavor corriga los siguientes errores: </b>
-                            <li v-for="error in errors">{{ error }}</li>
+                            <li v-for="error in errors" :key="error">{{ error }}</li>
                         </p>
                         <button class="btnCerrarErrores" @click="showError = false">
                              Cerrar ❌
@@ -250,7 +250,7 @@ Vue.use(vueCountryRegionSelect)
                             }
                         }).then(function(response) {
                             if(response != null){
-                                alert('Sin errores');
+                                //alert('Sin errores');
                                 window.location.reload(true)
                             }
                         })
@@ -336,7 +336,7 @@ Vue.use(vueCountryRegionSelect)
     
                     }).then(function(response) {
                         if(response != null){
-                            alert('Sin errores');
+                            //alert('Sin errores');
                              window.location.reload(true)
                         }
                     })
@@ -383,7 +383,7 @@ Vue.use(vueCountryRegionSelect)
                 });
             });
             Promise.all([mytokenPromise]).then((vals) => {
-                //console.log(mytokenPromise.accessToken);
+                console.log(mytokenPromise.accessToken);
                 this.$axios.$get('https://dtodoaqui.xyz/api/my_profile', {
                     withCredentials: false,
                     headers: {
@@ -394,7 +394,7 @@ Vue.use(vueCountryRegionSelect)
                     console.log(result);
                     if(result == ''){
                         console.log('jwt' + mytokenPromise.accessToken);
-                        alert('no hubo data');
+                        //alert('no hubo data');
                          let profile = JSON.stringify ({
                             profile: {
                             //'user_id': this.userID,

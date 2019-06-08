@@ -9,19 +9,10 @@
                     <ul class="nav-redesFooter">
                         <li>
                             <a class="color-IconF" href="">
-                                    <i class="fab fa-facebook"></i>
-                                </a>
+                                Descarga nuestra app <img src="~/assets/mobile.png" alt="App Icon - DtodoAqui Web">
+                            </a>
                         </li>
-                        <li>
-                            <a class="color-IconF" href="">
-                                    <i class="fab fa-twitter"></i>
-                                </a>
-                        </li>
-                        <li>
-                            <a class="color-IconF" href="">
-                                    <i class="fab fa-instagram"></i>
-                                </a>
-                        </li>
+                        
                     </ul>
                 </div>
             </div>
@@ -35,4 +26,21 @@ export default {
     name: 'Footer',
 }
 </script>
+<style>
+.color-IconF{
+    color:white;
+    font-family: 'muli_bold';
+    font-size: 18px;
+    transition:0.4s all;
+    text-decoration:none;
+}
+.color-IconF:hover,.color-IconF:focus{
+    color:rgba(255,29,71,1);
+    font-family: 'muli_bold';
+    font-size: 18px;
+    transition: 0.4s all;
+    text-decoration:none;
+}
+</style>
+
 
