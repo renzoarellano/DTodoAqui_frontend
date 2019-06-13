@@ -23,7 +23,8 @@
     "nuxt": "^2.4.0",
     "vue-browser-geolocation": "^1.8.0",
     "vue-country-region-select": "^2.0.6",
-    "vue-jwt-decode": "^0.1.0"
+    "vue-jwt-decode": "^0.1.0",
+    "vue2-google-maps": "^0.10.6"
   },
   "devDependencies": {
     "nodemon": "^1.18.9"

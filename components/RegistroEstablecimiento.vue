@@ -1,134 +1,49 @@
 <template>
     <div class="col-xs-12 np backgroundEstablecimiento">
-    
         <div class="container">
-<div class="row">
-<div v-if="showError" class="col-12 col-md-11 col-lg-7 np position-alert text-center">
-    
-            <div class="alert alert-danger" role="alert">
-    
-                <p>
-    
-                    <b>Porfavor corriga los siguientes errores: </b>
-    
-                    <li v-for="error in errors">{{ error }}</li>
-    
-                </p>
-    
-                <button class="btnCerrarErrores" @click="showError = false">
-    
+            <div class="row">
+                <div v-if="showError" class="col-12 col-md-11 col-lg-7 np position-alert text-center">
+                    <div class="alert alert-danger" role="alert">
+                        <p>Porfavor corriga los siguientes errores: </p>
+                        <li v-for="error in errors" :key="error">{{ error }}</li>
+                        <button class="btnCerrarErrores" @click="showError = false">
                             Cerrar ❌
-    
                         </button>
-    
-            </div>
-    
-        </div>
-        </div>
-        </div>
-    
-    
-    
-        <div class="login-wrapEstablecimiento">
-    
-    
-    
-            <div class="login-html">
-    
-    
-    
-                <div class="login-form">
-    
-                    <div class="group text-center">
-    
-    
-    
-                        <label for="fotoPerfil" class="label">Subir</label>
-    
-    
-    
-                        <input style="display:none" id="fotoPerfil" type="file" class="input" @change="onFotosFile" ref="subirFotos">
-    
-    
-    
-                        <button class="estiloSubirImg" @click="$refs.subirFotos.click()">
-    
-        
-    
-                                    Subir Logo
-    
-        
-    
-                                </button>
-    
-    
     
                     </div>
     
+                </div>
+            </div>
+        </div>
     
-    
-                    <form @submit="formRegistroEstablecimiento" enctype="multipart/form-data" autocomplete="off">
-    
-    
-    
-    
-    
+        <div class="login-wrapEstablecimiento">   
+            <div class="login-html">   
+                <div class="login-form">
+                    <div class="group text-center">    
+                        <label for="fotoPerfil" class="label">Subir</label>
+                        <input style="display:none" id="fotoPerfil" type="file" class="input" @change="onFotosFile" ref="subirFotos">
+                        <button class="estiloSubirImg" @click="$refs.subirFotos.click()">
+                            Subir Logo
+                        </button>   
+                    </div>   
+                    <form @submit="formRegistroEstablecimiento" enctype="multipart/form-data" autocomplete="off">   
                         <div class="group">
-    
-    
-    
-                            <label for="registroNombreEstablecimiento" class="label">Nombre de Establecimiento (Obligatorio)</label>
-    
-    
-    
-                            <input id="registroNombreEstablecimiento" v-model="nombreEstablecimiento" type="text" class="input">
-    
-    
-    
+                           <label for="registroNombreEstablecimiento" class="label">Nombre de Establecimiento (Obligatorio)</label>
+                           <input id="registroNombreEstablecimiento" v-model="nombreEstablecimiento" type="text" class="input">   
                         </div>
-    
-    
-    
                         <div class="group">
-    
-    
-    
-                            <label for="registroTelefonoEstablecimiento" class="label">Slug (Opcional)</label>
-    
-    
-    
+                            <label for="registroTelefonoEstablecimiento" class="label">Website o Página de Facebook (Opcional)</label>
                             <input id="registroTelefonoEstablecimiento" v-model="slugEstablecimiento" type="text" class="input">
-    
-    
-    
                         </div>
     
                         <div class="group">
-    
-    
-    
                             <label for="registroTelefonoEstablecimiento" class="label">Link de Google Map (Obligatorio)</label>
-    
-    
-    
                             <input id="registroUrlGoogleMap" v-model="urlGoogle" type="text" class="input">
-    
-    
-    
                         </div>
     
                         <div class="group">
-    
-    
-    
                             <label for="registroDireccionEstablecimiento" class="label">Dirección (Obligatorio)</label>
-    
-    
-    
                             <input id="registroDireccionEstablecimiento" v-model="direccionEstablecimiento" type="text" class="input">
-    
-    
-    
                         </div>
     
                         <div class="group" style="margin-top:20px">
@@ -139,129 +54,60 @@
     
                             <datalist id="listaDistritos">
     
-                                    <option v-for="distrito in distritos" v-bind:value="distrito.name"  v-bind:label="distrito.name">
+                                <option v-for="distrito in distritos" v-bind:value="distrito.name"  v-bind:label="distrito.name" :key="distrito.name"> </option>
     
-                                        
-    
-                                    </option>
-    
-                                    </datalist>
+                            </datalist>
     
                             <!--region-select class="form-control" v-model="region" :country="country" /-->
-    
+                        </div>
+                        <div class="group" style="margin-top:20px">
+                        <GmapMap
+                        :center="{lat:-12.041365, lng:-77.042026}"
+                        :zoom="12"
+                        style="width: 100%; height: 300px"
+                        >
+                        
+                        </GmapMap>
                         </div>
     
                         <div style="display:none">
-    
-    
-    
-    
-    
                             <div class="group">
-    
-    
-    
                                 <label for="registroTelefonoEstablecimiento" class="label">Teléfono</label>
-    
-    
-    
                                 <input id="registroTelefonoEstablecimiento" v-model="telefonoEstablecimiento" type="text" class="input">
-    
-    
-    
                             </div>
-    
-    
-    
-    
-    
-    
-    
+
                             <div class="group">
-    
-    
-    
                                 <label for="registroDireccionEstablecimiento" class="label">Horario de Atencion</label>
-    
-    
-    
                                 <input id="registroHorarioEstablecimiento" v-model="horarioEstablecimiento" type="text" class="input">
-    
-    
-    
                             </div>
-    
-    
-    
+
                             <div class="group">
-    
-    
-    
                                 <label for="registroDireccionEstablecimiento" class="label">Correo de Contacto</label>
-    
-    
-    
                                 <input id="registroCorreoEstablecimiento" v-model="correoEstablecimiento" type="email" class="input">
-    
-    
-    
                             </div>
-    
-    
-    
+
                             <div class="group">
-    
-    
-    
                                 <label for="registroDireccionEstablecimiento" class="label">Descripción del Establecimiento</label>
-    
-    
-    
                                 <textarea @change="getdescripcionEstablecimiento" id="registroDescripcionEstablecimiento" cols="30" rows="5" class="input"></textarea>
-    
-    
-    
                             </div>
     
                         </div>
-    
-    
-    
+
                         <div class="group">
-    
-    
-    
                             <button type="submit" class="button">Registrar</button>
-    
-    
-    
                         </div>
     
     
     
                     </form>
     
-    
-    
                     <div class="hr"></div>
-    
-    
-    
-    
-    
-    
-    
+
                 </div>
-    
-    
-    
+
             </div>
-    
-    
-    
+
         </div>
-    
-    
     
     </div>
 </template>
@@ -396,8 +242,8 @@ export default {
             this.errors = [];
             var datosMap = this.getLatandLong(this.urlGoogle);
             var slugverificado = this.verifySlug(this.slugEstablecimiento);
-            if (!this.slugEstablecimiento) {
-                this.errors.push('Slug mal ingresado');
+            if (slugverificado == false) {
+                this.errors.push('Ingrese un link correcto');
                 this.showError = true;
             }else{
                 this.slugEstablecimiento = slugverificado;
@@ -405,9 +251,9 @@ export default {
             console.log(this.slugEstablecimiento);
             var currentObjl = this;
             var storeData = this.$store.getters.loggeIn;
-            console.log(storeData.accessToken);
-            if(this.fotoRespone && this.nombreEstablecimiento && this.urlGoogle && this.direccionEstablecimiento && this.distrito){
-                this.axios.post('https://dtodoaqui.pw/api/location', {
+            //console.log(storeData.accessToken);
+            if(this.fotoRespone && this.nombreEstablecimiento && this.urlGoogle && this.direccionEstablecimiento && this.distrito && datosMap){
+                this.$axios.$post('https://dtodoaqui.pw/api/location', {
                     'location': {
                         'image_name': 'http://www.cccartagena.org.co/sites/default/files/imagenesbook/tienda.jpg',
                         'name': this.nombreEstablecimiento,
@@ -425,13 +271,10 @@ export default {
                     location.reload();
                     //console.log(this.errors);
                 })
-                .catch(function(error) {
-                    alert('ESTABLECIMIENTO NO CREADO - USTED NO ESTA REGISTRADO');
-                    console.log(error);
-                }).catch(function(error) {
+                .catch((error) => {
                     this.errors.push('¡Usuario no registrado!');
                     this.showError = true;
-                    currentObjl.output = error.response;
+                    //currentObjl.output = error.response;
                     console.log(currentObjl.output);
                 });
             }else{

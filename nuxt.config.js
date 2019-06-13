@@ -35,7 +35,8 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '~/plugins/country-select', ssr: false }
+    { src: '~/plugins/country-select', ssr: false },
+    { src: '~/plugins/googleMap', ssr: false }
   ],
 
   /*

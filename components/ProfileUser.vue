@@ -218,7 +218,7 @@ Vue.use(vueCountryRegionSelect)
                             'Content-Type': 'application/json',
                             'Authorization': 'Bearer ' + imageToken.accessToken
                         }
-                    }).then(function(response) {
+                    }).then((response) => {
                         console.log(response);
                         if(response != null){
                             let profileImg = JSON.stringify ({
@@ -227,7 +227,7 @@ Vue.use(vueCountryRegionSelect)
                             'avatar_name': response.data.image_name,
                             'first_name': this.nombres,
                             'last_name': this.apellidos,
-                            'country': this.country,
+                            'country': this.pais,
                             'address': this.direccion,
                             'description': this.descripcion,
                             'phone': this.telefono,
@@ -248,20 +248,20 @@ Vue.use(vueCountryRegionSelect)
                                 'Content-Type': 'application/json',
                                 'Authorization': 'Bearer ' + imageToken.accessToken
                             }
-                        }).then(function(response) {
+                        }).then((response) => {
                             if(response != null){
                                 //alert('Sin errores');
                                 window.location.reload(true)
                             }
                         })
-                        .catch(function(error) {
+                        .catch((error) => {
                             if(error){
                                 alert(error);
                             }
                         });
                         }
                     })
-                    .catch(function(error) {
+                    .catch((error) =>{
                         if(error){
                             alert(error);
                         }
@@ -320,7 +320,7 @@ Vue.use(vueCountryRegionSelect)
                             'avatar_name': this.imgProfile,
                             'first_name': this.nombres,
                             'last_name': this.apellidos,
-                            'country': this.country,
+                            'country': this.pais,
                             'address': this.direccion,
                             'description': this.descripcion,
                             'phone': this.telefono,
@@ -334,13 +334,13 @@ Vue.use(vueCountryRegionSelect)
                             'Authorization': 'Bearer ' + UserId.accessToken
                         }
     
-                    }).then(function(response) {
+                    }).then((response) => {
                         if(response != null){
                             //alert('Sin errores');
                              window.location.reload(true)
                         }
                     })
-                    .catch(function(error) {
+                    .catch((error) => {
                         if(error){
                             alert(error);
                         }
@@ -421,10 +421,10 @@ Vue.use(vueCountryRegionSelect)
                             'Authorization': 'Bearer ' + mytokenPromise.accessToken
                         },
                         
-                    }).then(function(response) {
+                    }).then((response) => {
                         window.location.reload(true)
                     })
-                    .catch(function(error) {
+                    .catch((error) => {
                         console.log(error);
                     }); 
                     }else{
