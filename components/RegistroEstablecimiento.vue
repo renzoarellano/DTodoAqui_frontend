@@ -61,13 +61,29 @@
                             <!--region-select class="form-control" v-model="region" :country="country" /-->
                         </div>
                         <div class="group" style="margin-top:20px">
-                        <GmapMap
-                        :center="{lat:-12.041365, lng:-77.042026}"
-                        :zoom="12"
-                        style="width: 100%; height: 300px"
-                        >
                         
-                        </GmapMap>
+                        <label>
+                            <gmap-autocomplete
+                            @place_changed="setPlace">
+                            </gmap-autocomplete>
+                            <button @click="addMarker">Add</button>
+                        </label>
+                        <br/>
+
+                        </div>
+                        <div class="group" style="margin-top:20px">
+                            <gmap-map
+                            :center="center"
+                            :zoom="15"
+                            style="width:100%;  height: 400px;"
+                            >
+                            <gmap-marker
+                                :key="index"
+                                v-for="(m, index) in markers"
+                                :position="m.position"
+                                @click="center=m.position"
+                            ></gmap-marker>
+                            </gmap-map>
                         </div>
     
                         <div style="display:none">
@@ -113,8 +129,12 @@
 </template>
 
 <script>
+import componentMap from '@/components/componentMap.vue';
 export default {
     name: 'RegistroEstablecimiento',
+    components: {
+      componentMap,
+    },
     data() {
         return {
             fotosFile: '',
@@ -183,10 +203,14 @@ export default {
                 { name: "Villa El Salvador" },
                 { name: "Villa María del Triunfo" }
             ],
-        }
+            center: { lat: 45.508, lng: -73.587 },
+            markers: [],
+            places: [],
+            currentPlace: null, 
+      };
     },
     mounted() {
-
+        this.geolocate();
     },
     methods: {
         setImage(foto) {
@@ -253,7 +277,7 @@ export default {
             var storeData = this.$store.getters.loggeIn;
             //console.log(storeData.accessToken);
             if(this.fotoRespone && this.nombreEstablecimiento && this.urlGoogle && this.direccionEstablecimiento && this.distrito && datosMap){
-                this.$axios.$post('https://dtodoaqui.pw/api/location', {
+                this.$axios.$post('http://35.226.8.87/api/location', {
                     'location': {
                         'image_name': 'http://www.cccartagena.org.co/sites/default/files/imagenesbook/tienda.jpg',
                         'name': this.nombreEstablecimiento,
@@ -294,7 +318,31 @@ export default {
                     this.showError = true;
             }
         },
-
+        // receives a place object via the autocomplete component
+        setPlace(place) {
+        this.currentPlace = place;
+        },
+        addMarker() {
+        if (this.currentPlace) {
+            const marker = {
+            lat: this.currentPlace.geometry.location.lat(),
+            lng: this.currentPlace.geometry.location.lng()
+            };
+            this.markers.push({ position: marker });
+            this.places.push(this.currentPlace);
+            this.center = marker;
+            this.currentPlace = null;
+        }
+        },
+        geolocate: function() {
+        navigator.geolocation.getCurrentPosition(position => {
+            this.center = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+            };
+        });
+        },
+        
     },
 }
 </script>

@@ -24,6 +24,7 @@
     "vue-browser-geolocation": "^1.8.0",
     "vue-country-region-select": "^2.0.6",
     "vue-jwt-decode": "^0.1.0",
+    "vue2-gmap-custom-marker": "^5.5.4",
     "vue2-google-maps": "^0.10.6"
   },
   "devDependencies": {

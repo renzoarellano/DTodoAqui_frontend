@@ -104,7 +104,7 @@ const Cookie = process.client ? require('js-cookie') : undefined
                 if (this.registrousername && this.validEmail(this.registroemail) && this.registropassword && this.registrorepassword) {
                     if (this.registrorepassword == this.registropassword) {
                         let currentObj = this;
-                        this.$axios.$post('https://dtodoaqui.xyz/api/sign_up', {
+                        this.$axios.$post('http://35.226.8.87/api/sign_up', {
                                 user: {
                                     username: this.registrousername,
                                     email: this.registroemail,
@@ -169,7 +169,7 @@ const Cookie = process.client ? require('js-cookie') : undefined
                     //console.log('Logeando');
                     var currentObjl = this;
                     console.log('Logeando');
-                    this.$axios.$post('https://dtodoaqui.xyz/api/sign_in', {
+                    this.$axios.$post('http://35.226.8.87/api/sign_in', {
                             'username': this.username,
                             'password': this.password
                         })

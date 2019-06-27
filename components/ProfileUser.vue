@@ -17,7 +17,7 @@
                     <div class="row">
                         <div class="pictureUser col-12 col-md-6">
                             <div class="col-xs-12 np">
-                                <img class="tamPicture" v-bind:src="'https://dtodoaqui.xyz/'+imgProfile" alt="">
+                                <img class="tamPicture" v-bind:src="'http://35.226.8.87/'+imgProfile" alt="">
                             <input style="display:none" id="fotoPerfil" type="file" class="input" @change="onFotoPerfilFile" ref="subirFotoPerfil">
     
                             <button class="estiloSubirFotoProfile" @click="$refs.subirFotoPerfil.click()">
@@ -211,17 +211,18 @@ Vue.use(vueCountryRegionSelect)
                             'entity_name': 'profile',
                             }
                         });
+                    
                         let imageToken = this.$store.getters.loggeIn;
                     //console.log(images);
-                    this.$axios.$post('https://dtodoaqui.xyz/api/upload_image',images, {
+                    this.$axios.$post('http://35.226.8.87/api/upload_image',images, {
                         headers:{
                             'Content-Type': 'application/json',
                             'Authorization': 'Bearer ' + imageToken.accessToken
                         }
                     }).then((response) => {
                         console.log(response);
-                        if(response != null){
-                            let profileImg = JSON.stringify ({
+                        if(response){
+                        let profileImg = JSON.stringify ({
                             //user_id': parseInt(UserId.id),
                             profile:{
                             'avatar_name': response.data.image_name,
@@ -242,11 +243,11 @@ Vue.use(vueCountryRegionSelect)
                             'updated_at': '2019-10-29T20:12:30Z',*/
                         });
                         console.log(profileImg);
-                        let imageToken = this.$store.getters.loggeIn;
-                        this.$axios.$put('https://dtodoaqui.xyz/api/my_profile',profileImg, {
+                        let Tokenimage = this.$store.getters.loggeIn;
+                        this.$axios.$put('http://35.226.8.87/api/my_profile',profileImg, {
                             headers: {
                                 'Content-Type': 'application/json',
-                                'Authorization': 'Bearer ' + imageToken.accessToken
+                                'Authorization': 'Bearer ' + Tokenimage.accessToken
                             }
                         }).then((response) => {
                             if(response != null){
@@ -301,7 +302,7 @@ Vue.use(vueCountryRegionSelect)
             },
             cambiarDatos() {
                 this.changeDatos = true;
-                //console.log(this.pais);
+                console.log(this.pais);
             },
             cancelarDatos() {
                 this.changeDatos = false;
@@ -328,7 +329,7 @@ Vue.use(vueCountryRegionSelect)
                             'facebook': this.facebook,
                             }
                         })
-                    this.$axios.$put('https://dtodoaqui.xyz/api/my_profile',profile, {
+                    this.$axios.$put('http://35.226.8.87/api/my_profile',profile, {
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': 'Bearer ' + UserId.accessToken
@@ -372,7 +373,7 @@ Vue.use(vueCountryRegionSelect)
             let mytokenPromise = this.$store.getters.loggeIn;
 
             Promise.all([mytokenPromise]).then((vals) => {
-                this.$axios.$get('https://dtodoaqui.xyz/api/my_user', {
+                this.$axios.$get('http://35.226.8.87/api/my_user', {
                     withCredentials: false,
                     headers: {
                         'Authorization': 'Bearer ' + mytokenPromise.accessToken
@@ -384,7 +385,7 @@ Vue.use(vueCountryRegionSelect)
             });
             Promise.all([mytokenPromise]).then((vals) => {
                 console.log(mytokenPromise.accessToken);
-                this.$axios.$get('https://dtodoaqui.xyz/api/my_profile', {
+                this.$axios.$get('http://35.226.8.87/api/my_profile', {
                     withCredentials: false,
                     headers: {
                         
@@ -399,14 +400,14 @@ Vue.use(vueCountryRegionSelect)
                             profile: {
                             //'user_id': this.userID,
                             'avatar_name': 'images/empty.png',
-                            'first_name': 'Mi Nombre',
-                            'last_name': 'Mi Apellido',
+                            'first_name': ' ',
+                            'last_name': ' ',
                             'country': 'PE',
-                            'address': 'Mi dirección',
-                            'description': 'Mi Descripción',
-                            'phone': '999999999',
-                            'website': 'prueba.web',
-                            'facebook': 'Ingrese aquí tu link de facebook',
+                            'address': ' ',
+                            'description': '  ',
+                            'phone': ' ',
+                            'website': ' ',
+                            'facebook': ' ',
                             //'twitter': 'prueba.twit',
                             //'linkedin': 'prueba.link',
                             /*'created': '2019-10-29T20:12:30Z',
@@ -415,7 +416,7 @@ Vue.use(vueCountryRegionSelect)
                             'updated_at': '2019-10-29T20:12:30Z',*/
                         }
                         })
-                        this.$axios.$post('https://dtodoaqui.xyz/api/my_profile',profile, {
+                        this.$axios.$post('http://35.226.8.87/api/my_profile',profile, {
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': 'Bearer ' + mytokenPromise.accessToken
