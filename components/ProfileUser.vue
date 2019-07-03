@@ -211,10 +211,10 @@ Vue.use(vueCountryRegionSelect)
                             'entity_name': 'profile',
                             }
                         });
-                    
+                        
                         let imageToken = this.$store.getters.loggeIn;
-                    //console.log(images);
-                    this.$axios.$post('http://35.226.8.87/api/upload_image',images, {
+                    console.log(images);
+                    this.$axios.$post('https://dtodoaqui.xyz/api/upload_image',images, {
                         headers:{
                             'Content-Type': 'application/json',
                             'Authorization': 'Bearer ' + imageToken.accessToken
@@ -314,14 +314,14 @@ Vue.use(vueCountryRegionSelect)
                 e.preventDefault();
                 this.errors = [];
                 var UserId = this.$store.getters.loggeIn
-                if(this.nombres && this.apellidos && this.telefono && this.country && this.direccion){
+                if(this.nombres && this.apellidos && this.telefono && this.pais && this.direccion){
                     let profile = JSON.stringify ({
                             //user_id': parseInt(UserId.id),
                             profile:{
                             'avatar_name': this.imgProfile,
                             'first_name': this.nombres,
                             'last_name': this.apellidos,
-                            'country': this.pais,
+                            'country': this.country,
                             'address': this.direccion,
                             'description': this.descripcion,
                             'phone': this.telefono,

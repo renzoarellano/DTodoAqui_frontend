@@ -50,41 +50,18 @@
     
                             <label for="registroDireccionEstablecimiento" class="label">Ingrese distrito (Obligatorio)</label>
     
-                            <input list="listaDistritos" v-model="distrito" class="input" type="text" placeholder="Distrito">
-    
-                            <datalist id="listaDistritos">
-    
-                                <option v-for="distrito in distritos" v-bind:value="distrito.name"  v-bind:label="distrito.name" :key="distrito.name"> </option>
-    
+                            <input list="listaDistritos" v-model="distrito"  class="form-control text-center" type="text"  placeholder="Distrito">
+                            <datalist id="listaDistritos" >
+                            <option v-for="distrito in distritos" v-bind:value="distrito.name"  v-bind:label="distrito.name" :key="distrito.name">
+                            </option>
                             </datalist>
     
                             <!--region-select class="form-control" v-model="region" :country="country" /-->
                         </div>
                         <div class="group" style="margin-top:20px">
                         
-                        <label>
-                            <gmap-autocomplete
-                            @place_changed="setPlace">
-                            </gmap-autocomplete>
-                            <button @click="addMarker">Add</button>
-                        </label>
-                        <br/>
-
                         </div>
-                        <div class="group" style="margin-top:20px">
-                            <gmap-map
-                            :center="center"
-                            :zoom="15"
-                            style="width:100%;  height: 400px;"
-                            >
-                            <gmap-marker
-                                :key="index"
-                                v-for="(m, index) in markers"
-                                :position="m.position"
-                                @click="center=m.position"
-                            ></gmap-marker>
-                            </gmap-map>
-                        </div>
+                  
     
                         <div style="display:none">
                             <div class="group">
@@ -151,63 +128,23 @@ export default {
             urlGoogle: '',
             showError: false,
             errors: [],
-            distritos: [
-                { name: "Callao" },
-                { name: "Bellavista" },
-                { name: "Carmen de la Legua Reynoso" },
-                { name: "La Perla" },
-                { name: "La Punta" },
-                { name: "Ventanilla" },
-                { name: "Mi Perú" },
-                { name: "Lima" },
-                { name: "Ancón" },
-                { name: "Ate" },
-                { name: "Barranco" },
-                { name: "Breña" },
-                { name: "Carabayllo" },
-                { name: "Chaclacayo" },
-                { name: "Chorrillos" },
-                { name: "Cieneguilla" },
-                { name: "Comas" },
-                { name: "El Agustino" },
-                { name: "Independencia" },
-                { name: "Jesús María" },
-                { name: "La Molina" },
-                { name: "La Victoria" },
-                { name: "Lince" },
-                { name: "Los Olivos" },
-                { name: "Lurigancho" },
-                { name: "Lurin" },
-                { name: "Magdalena del Mar" },
-                { name: "Pueblo Libre" },
-                { name: "Miraflores" },
-                { name: "Pachacamac" },
-                { name: "Pucusana" },
-                { name: "Puente Piedra" },
-                { name: "Punta Hermosa" },
-                { name: "Punta Negra" },
-                { name: "Rímac" },
-                { name: "San Bartolo" },
-                { name: "San Borja" },
-                { name: "San Isidro" },
-                { name: "San Juan de Lurigancho" },
-                { name: "San Juan de Miraflores" },
-                { name: "San Luis" },
-                { name: "San Martín de Porres" },
-                { name: "San Miguel" },
-                { name: "Santa Anita" },
-                { name: "Santa María del Mar" },
-                { name: "Santa Rosa" },
-                { name: "Santiago de Surco" },
-                { name: "Surquillo" },
-                { name: "Villa El Salvador" },
-                { name: "Villa María del Triunfo" }
-            ],
+            distrito: '',
+            distritos: {},
             center: { lat: 45.508, lng: -73.587 },
             markers: [],
             places: [],
             currentPlace: null, 
       };
+    },
+    created(){
+        this.$axios.$get('https://dtodoaqui.xyz/api/location').then((response) => {
+        this.distritos = response.data;
+        console.log(this.distritos);
+        }).catch((error) => {
+        
+        console.log(error);
+        });
+        
     },
     mounted() {
         this.geolocate();
@@ -344,6 +281,7 @@ export default {
         },
         
     },
+    
 }
 </script>
 

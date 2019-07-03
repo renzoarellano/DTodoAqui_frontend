@@ -84,6 +84,7 @@ data(){
         resenaPuestas: '',
         showError:false,
         errors:[],
+        
     }
 },
 methods:{

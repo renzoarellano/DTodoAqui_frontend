@@ -7,24 +7,9 @@
         <div class="col-12  col-lg-12 col-xl-12">
             <!--Filtro de Busqueda -->
         </div>
-        <div class="col-12  col-lg-6 col-xl-6 espacioEstablecimiento">
-            <Establecimiento :id="'1'" :imagen="'https://d500.epimg.net/cincodias/imagenes/2018/11/13/lifestyle/1542113135_776401_1542116070_noticia_normal.jpg'"
-            :title="'Esto es una prueba'" :direccion="'Prueba de direccion'" :keywords="keyword" :descripcion="'Esto es una descripcion descripcion descripcion descripcion'"/>
-        </div>
-
-        <div class="col-12  col-lg-6 col-xl-6 espacioEstablecimiento">
-            <Establecimiento :id="'1'" :imagen="'https://d500.epimg.net/cincodias/imagenes/2018/11/13/lifestyle/1542113135_776401_1542116070_noticia_normal.jpg'"
-            :title="'Esto es una prueba'" :direccion="'Prueba de direccion'" :keywords="keyword" :descripcion="'Esto es una descripcion descripcion descripcion descripcion'"/>
-        </div>
-
-        <div class="col-12  col-lg-6 col-xl-6 espacioEstablecimiento">
-            <Establecimiento :id="'1'" :imagen="'https://d500.epimg.net/cincodias/imagenes/2018/11/13/lifestyle/1542113135_776401_1542116070_noticia_normal.jpg'"
-            :title="'Esto es una prueba'" :direccion="'Prueba de direccion'" :keywords="keyword" :descripcion="'Esto es una descripcion descripcion descripcion descripcion'"/>
-        </div>
-
-        <div class="col-12  col-lg-6 col-xl-6 espacioEstablecimiento">
-            <Establecimiento :id="'1'" :imagen="'https://d500.epimg.net/cincodias/imagenes/2018/11/13/lifestyle/1542113135_776401_1542116070_noticia_normal.jpg'"
-            :title="'Esto es una prueba'" :direccion="'Prueba de direccion'" :keywords="keyword" :descripcion="'Esto es una descripcion descripcion descripcion descripcion'"/>
+        <div class="col-12  col-lg-6 col-xl-6 espacioEstablecimiento" v-for="establecimiento in establecimientos" :key="establecimiento.id" >
+            <Establecimiento  :id="establecimiento.id" :imagen="establecimiento.slug"
+            :title="establecimiento.name" :direccion="establecimiento.address" :keywords="keyword" :descripcion="establecimiento.description"/>
         </div>
          
       </div>  
@@ -50,9 +35,19 @@ export default {
   },
   data(){
     return{
-      keyword:'Ceviche'
+      keyword:'Ceviche',
+      establecimientos:{},
     }
-  }
+  },
+  created(){
+       this.$axios.$get('https://dtodoaqui.xyz/api/listings').then((response) => {
+        this.establecimientos = response.data;
+        console.log(this.establecimientos);
+        }).catch((error) => {
+        
+        console.log(error);
+        });
+    }
 };
 </script>
 <style>

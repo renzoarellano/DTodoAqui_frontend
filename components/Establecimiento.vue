@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import Axios from 'axios';
 export default {
     name: 'Establecimiento',
     props:{
@@ -57,7 +58,8 @@ export default {
         direccion:String,
         keywords:String,
         descripcion:String
-    }
+    },
+    
 }
 </script>
 

@@ -87,11 +87,10 @@
                                 <input class="searchHeaderstyle" type="text" placeholder="Keyword">
                             </div>
                             <div class="col-12 col-sm-4 padright">
-                                <input class="searchHeaderstyle" list="listaDistritos" type="text" placeholder="Ubicación">
-                                <datalist id="listaDistritos">
-                                    <option>
-                                                
-                                    </option>
+                                <input list="listaDistritos" v-model="distrito"  class="searchHeaderstyle" type="text"  placeholder="Distrito">
+                                <datalist id="listaDistritos" >
+                                <option v-for="distrito in distritos" v-bind:value="distrito.name"  v-bind:label="distrito.name" :key="distrito.name">
+                                </option>
                                 </datalist>
                             </div>
                             <div class="col-12 col-sm-1 padfix">
@@ -154,6 +153,8 @@ export default {
             change4: 'change44',
             change6: 'change66',
             bte2c: 'bte22c',
+            distritos:{},
+            distrito: '',
             contador: 0,
             styleSubheader: {
                 marginLeft: '6000px',
@@ -193,8 +194,18 @@ export default {
         loggedIn() {
            return this.$store.getters.loggeIn;
         },
-
-    }
+    },
+    created(){
+      
+         this.$axios.$get('https://dtodoaqui.xyz/api/location').then((response) => {
+        this.distritos = response.data;
+        //console.log(this.distritos);
+        }).catch((error) => {
+        
+        console.log(error);
+        });
+        
+    },
 };
 </script>
 
