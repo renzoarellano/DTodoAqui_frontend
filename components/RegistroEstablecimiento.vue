@@ -283,7 +283,7 @@ export default {
                 console.log(listings);
                 console.log(datosMap);
                 
-                this.$axios.$post('http://35.226.8.87/api/listings', listings,{
+                this.$axios.$post('https://dtodoaqui.xyz/api/listings', listings,{
                     headers: {
                         'Content-Type': 'application/json'      
                     },

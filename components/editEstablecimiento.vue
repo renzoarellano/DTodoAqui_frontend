@@ -345,7 +345,7 @@ Vue.use(vueCountryRegionSelect)
                 console.log(listings);
                 console.log(datosMap);
                 
-                this.$axios.$put('http://35.226.8.87/api/listings/'+parseInt(this.getID), listings,{
+                this.$axios.$put('https://dtodoaqui.xyz/api/api/listings/'+parseInt(this.getID), listings,{
                     headers: {
                         'Content-Type': 'application/json'      
                     },
