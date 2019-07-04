@@ -17,12 +17,12 @@
                     <div class="row">
                         <div class="pictureUser col-12 col-md-6">
                             <div class="col-xs-12 np">
-                                <img class="tamPicture" v-bind:src="'http://35.226.8.87/'+imgProfile" alt="">
+                                <img class="tamPicture" v-bind:src="'https://dtodoaqui.xyz/'+slug" alt="">
                             <input style="display:none" id="fotoPerfil" type="file" class="input" @change="onFotoPerfilFile" ref="subirFotoPerfil">
     
                             <button class="estiloSubirFotoProfile" @click="$refs.subirFotoPerfil.click()">
     
-                                Actualizar Foto
+                                Actualizar Logo
     
                             </button>
                             </div>
@@ -30,15 +30,20 @@
                         <div class="col-12 col-md-6">
                             <div class="col-12">
                                 <h2 class="nameUser text-center">
-                                    {{nombres}}
+                                    {{name}}
                                 </h2>
                             </div>
                             <div class="col-12 text-center">
-                                <a target="_blank" class="iconRedes" v-bind:href="facebook">
+                                <a target="_blank" class="iconRedes" v-bind:href="linkFacebook">
                                     <img src="~/assets/facebook.png" alt="Facebook - DtodoAqui">
                                 </a>
                             </div>
                             <div class="col-12 text-justify posDescripcion">
+                                <div class="col-12 np">
+                                    <h5 class="subtituloDescp">
+                                        Descripción:
+                                    </h5>
+                                </div>
                                 <p class="descriptionUser">
                                     {{descripcion}}
                                 </p>
@@ -48,41 +53,25 @@
                 </div>
                 <div class="col-12 posDatosTotales">
                     <h1 class="titDatos">
-                        Mi información:
+                        Información del establecimiento:
                     </h1>
                 </div>
                 <div class="col-12 col-md-4 text-left">
-                    <div class="col-12 np">
-                        <button @click="cambiarContrasena" class="btnModificarPass" style="visibility:hidden;">
-                            Modificar Contraseña
-                        </button>
-                    </div>
-                    <div class="col-12 np posLoginNames">
-                        <form autocomplete="off">
-                            <div class="form-group">
-                                <label for="firstName"><i class="fab fa-galactic-senate"></i> Nombre de Usuario: </label>
-                                <input type="text" class="inputProfile" aria-describedby="nameHelp" v-model="username" disabled>
-                            </div>
-                            <div v-if="changePass" class="col-12 np">
-                                <div class="form-group">
-                                    <label for="firstName"><i class="fab fa-galactic-senate"></i>Nueva contraseña: </label>
-                                    <input type="text" v-model="cpassword" class="inputProfile" aria-describedby="passHelp" placeholder="Mi Password">
-                                </div>
-                                <div class="form-group">
-                                    <label for="firstName"><i class="fab fa-galactic-senate"></i>Vuelva a ingresar su nueva contraseña: </label>
-                                    <input type="text" v-model="crepassword" class="inputProfile" aria-describedby="passHelp" placeholder="Mi Password">
-                                </div>
-                                <div class="col-12 text-center">
-                                    <button type="submit" class="btnActualizar">Actualizar Password</button>
-                                </div>
-                                <div v-if="changePass" class="col-12 text-center" style="margin-top:25px;">
-                                    <button @click="cancelarPass" class="btnCancelarDatos">
-                                                    Cancelar
-                                                </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+                <GmapMap
+                :center="{lat: parseFloat(datos.latitude), lng:parseFloat(datos.longitude)}"
+                :zoom="16"
+                style="width: 100%; max-height: 450px; min-height: 400px; border: 2px solid black"
+                >
+                    
+                <gmap-marker
+                :key="index"
+                v-for="(m, index) in markers"
+                :position="m.position"
+                :clickable="true"
+                :draggable="true"
+                @click="center=m.position"
+                ></gmap-marker>
+                </GmapMap>
                 </div>
                 <div class="col-12 col-md-8 text-left">
                     <div class="col-12 np">
@@ -102,44 +91,62 @@
                     <div class="col-12 posLoginNames">
                         <form @submit="formDatos" autocomplete="off">
                             <div class="form-group">
-                                <label for="firstName"><i class="fab fa-galactic-senate"></i> Nombres: </label>
-                                <input type="text" v-model="nombres" class="inputProfile" aria-describedby="nameHelp" placeholder="Mi Nombre Completo" :disabled="!changeDatos">
+                                <label for="firstName"><i class="fab fa-galactic-senate"></i> Nombre del Establecimiento: </label>
+                                <input type="text" v-model="name" class="inputProfile" aria-describedby="nameHelp" placeholder="Nombre del establecimiento" :disabled="!changeDatos">
                                 <small id="nameHelp" class="form-text text-muted">Este campo es obligatorio!.</small>
                             </div>
                             <div class="form-group">
-                                <label for="lastName"><i class="fas fa-dice-d20"></i> Apellidos: </label>
-                                <input type="text" v-model="apellidos" class="inputProfile" aria-describedby="apellidoHelp" placeholder="Mi Apellido Completo" :disabled="!changeDatos">
+                                <label for="lastName"><i class="fas fa-dice-d20"></i> Dirección del establecimiento: </label>
+                                <input type="text" v-model="address" class="inputProfile" aria-describedby="apellidoHelp" placeholder="Dirección" :disabled="!changeDatos">
                                 <small id="apellidoHelp" class="form-text text-muted">Este campo es obligatorio!.</small>
                             </div>
                             <div class="form-group">
-                                <label for="phoneUser"><i class="fas fa-phone-square"></i> Teléfono: </label>
-                                <input type="text" v-model="telefono" class="inputProfile" aria-describedby="telefonoHelp" placeholder="Mi Teléfono" :disabled="!changeDatos">
+                                <label for="phoneUser"><i class="fas fa-phone-square"></i> Horario de atención: </label>
+                                <input type="text" v-model="openingHours" class="inputProfile" aria-describedby="telefonoHelp" placeholder="Horario de atención" :disabled="!changeDatos">
                                 <small id="nameHelp" class="form-text text-muted">Este campo es obligatorio!.</small>
                             </div>
-                            <div v-if="!changeDatos" class="form-group">
-                                <label for="paisUser"><i class="fas fa-grin-beam-sweat"></i> País: </label>
-                                <input type="text" v-model="pais" class="inputProfile" aria-describedby="paisHelp" placeholder="Mi Pais" :disabled="!changeDatos">
+                            <div class="col-12 np" v-if="!changeDatos">
+                            <div class="form-group">
+                                <label for="phoneUser"><i class="fas fa-phone-square"></i> Categoría: </label>
+                                <input type="text" v-model="categoria" class="inputProfile" aria-describedby="telefonoHelp" placeholder="" :disabled="!changeDatos">
                                 <small id="nameHelp" class="form-text text-muted">Este campo es obligatorio!.</small>
                             </div>
                             <div class="form-group">
-                                <label for="paisUser"><i class="fas fa-grin-beam-sweat"></i> Dirección: </label>
-                                <input type="text" v-model="direccion" class="inputProfile" aria-describedby="direccionHelp" placeholder="Mi Dirección" :disabled="!changeDatos">
+                                <label for="phoneUser"><i class="fas fa-phone-square"></i> Distrito: </label>
+                                <input type="text" v-model="location" class="inputProfile" aria-describedby="telefonoHelp" placeholder="" :disabled="!changeDatos">
                                 <small id="nameHelp" class="form-text text-muted">Este campo es obligatorio!.</small>
                             </div>
+                            </div>
+                            
                             <div v-if="changeDatos" class="col-12 np">
+                                <div class="group" style="margin-top:20px">
+    
+                            <label for="registroDireccionEstablecimiento" class="label">Ingrese distrito (Obligatorio)</label>
+                            <select id="listaCategoriase" v-model="location_id" >
+                            <option disabled selected  value="">Seleccione un distrito</option>
+                            <option v-for="distrito in distritos"  :value="distrito.id" :key="distrito.id">{{distrito.name}}</option>
+                            </select>
+    
+                            <!--region-select class="form-control" v-model="region" :country="country" /-->
+                            </div>
+                            <div class="group" style="margin-top:20px">
+    
+                            <label for="registroDireccionEstablecimiento" class="label">Seleccione una categoría (Obligatorio)</label>
+                            <select id="listaCategoriase" v-model="categoria_id" >
+                            <option disabled selected  value="">Seleccione una categoria</option>
+                            <option v-for="categoria in categorias"  :value="categoria.id" :key="categoria.id">{{categoria.name}}</option>
+                            </select>
+                            <!--region-select class="form-control" v-model="region" :country="country" /-->
+                            </div>
                                 <div class="form-group">
-                                    <label for="paisUser"><i class="fas fa-globe"></i> País: </label>
-                                    <country-select class="selectedStyle" v-model="country" :country="country" topCountry="" />
-                                    <small id="nameHelp" class="form-text text-muted">Este campo es obligatorio!.</small>
+                                <label for="phoneUser"><i class="fas fa-phone-square"></i> Nuevo Link de Google Map: </label>
+                                <input type="text" v-model="linkGoogle" class="inputProfile" aria-describedby="telefonoHelp" placeholder="Ingrese link válido" :disabled="!changeDatos">
+                                <small id="nameHelp" class="form-text text-muted">Este campo es obligatorio!.</small>
                                 </div>
-                                <div class="form-group">
-                                    <label for="facebookUser"><i class="fas fa-grin-beam-sweat"></i> Link facebook: </label>
-                                    <input type="text" v-model="facebook" class="inputProfile" aria-describedby="facebook" placeholder="Mi link de Facebook">
-                                    <small id="nameHelp" class="form-text text-muted">Opcional</small>
-                                </div>
+                           
                                 <div class="form-group">
                                     <label for="paisUser"><i class="fas fa-grin-beam-sweat"></i>Nueva Descripción: </label>
-                                    <textarea @change="getdescripcionProfile"  class="inputProfile" rows="5" placeholder="Mi Descripción" v-bind:value="descripcion"></textarea>
+                                    <textarea @change="descripcion"  class="inputProfile" rows="5" placeholder="Mi Descripción" v-bind:value="descripcion"></textarea>
                                     <small id="nameHelp" class="form-text text-muted">Opcional</small>
                                 </div>
                                 <div class="col-12 text-center">
@@ -166,21 +173,30 @@ Vue.use(vueCountryRegionSelect)
             return {
                 fotosFile: '',
                 profileImage: '',
-                nameProfileImage: '',
-                username: '',
-                userID: '',
-                cpassword: '',
-                crepassword: '',
-                nombres: '',
-                apellidos: '',
-                telefono: '',
-                country: '',
-                pais: '',
-                facebook: '',
-                direccion: '',
-                descripcion: '',
-                idprofile:'',
+                nameProfileImage:'',
+                imgSrc:'',
+                datos:{},
+                categoria:'',
+                categorias:{},
+                distrito:'',
+                distritos:{},
+                name:'',
+                descripcion:'',
+                slug:'',
+                openingHours:'',
+                linkFacebook:'',
+                location:'',
+                idEstablecimiento: '',
+                linkGoogle:'',
+                getID:'',
+                address:'',
+                categoria_id:'',
+                location_id:'',
+                resenaPuestas:{},
                 imgProfile: '',
+                markers: [
+                {position: { lng: 10.2, lat: 10 }}
+                ],
                 changePass: false,
                 changeDatos: false,
                 errors: [],
@@ -202,18 +218,17 @@ Vue.use(vueCountryRegionSelect)
                 reader.onload = (event) => {
                     this.imgSrc = event.target.result
                     this.fotosFile = this.imgSrc;
-                    //console.log(this.fotosFile);
+                    console.log(this.fotosFile);
+                    let imageToken = this.$store.getters.loggeIn;
                     let images = JSON.stringify ({
                             image: {
                             'image_name': this.nameProfileImage,
                             'image_base64': this.fotosFile,
-                            'entity_id': this.idprofile,
-                            'entity_name': 'profile',
+                            'entity_id': imageToken.id,
+                            'entity_name': 'establecimiento',
                             }
-                        });
-                        
-                        let imageToken = this.$store.getters.loggeIn;
-                    //console.log(images);
+                    })
+                    console.log(images);
                     this.$axios.$post('https://dtodoaqui.xyz/api/upload_image',images, {
                         headers:{
                             'Content-Type': 'application/json',
@@ -222,32 +237,28 @@ Vue.use(vueCountryRegionSelect)
                     }).then((response) => {
                         console.log(response);
                         if(response){
-                        let profileImg = JSON.stringify ({
+                        var storeData = this.$store.getters.loggeIn;
+                        let establecimientoIMG = JSON.stringify ({
                             //user_id': parseInt(UserId.id),
-                            profile:{
-                            'avatar_name': response.data.image_name,
-                            'first_name': this.nombres,
-                            'last_name': this.apellidos,
-                            'country': this.pais,
-                            'address': this.direccion,
-                            'description': this.descripcion,
-                            'phone': this.telefono,
-                            'website': 'prueba.web',
-                            'facebook': this.facebook,
+                            listing:{
+                            'name': this.name,
+                            'address': this.address,
+                            'category_id':parseInt(this.categoria_id),
+                            'location_id':parseInt(this.location_id),
+                            'slug': response.data.image_name,
+                            'description':this.descripcion,
+                            'latitude': this.markers[0].position.lat,
+                            'longitude': this.markers[0].position.lng,
+                            'video_youtube': this.linkFacebook,
+                            'opening_hours':this.openingHours,
+                            'user_id': storeData.id
                             }
-                            //'twitter': 'prueba.twit',
-                            //'linkedin': 'prueba.link',
-                            /*'created': '2019-10-29T20:12:30Z',
-                            'modified': '2019-10-29T20:12:30Z',
-                            'inserted_at': '2019-10-29T20:12:30Z',
-                            'updated_at': '2019-10-29T20:12:30Z',*/
                         });
-                        console.log(profileImg);
+                        console.log(establecimientoIMG);
                         let Tokenimage = this.$store.getters.loggeIn;
-                        this.$axios.$put('http://35.226.8.87/api/my_profile',profileImg, {
+                        this.$axios.$put('https://dtodoaqui.xyz/api/listings/'+this.getID,establecimientoIMG, {
                             headers: {
                                 'Content-Type': 'application/json',
-                                'Authorization': 'Bearer ' + Tokenimage.accessToken
                             }
                         }).then((response) => {
                             if(response != null){
@@ -312,135 +323,136 @@ Vue.use(vueCountryRegionSelect)
             formDatos(e) {
                 e.preventDefault();
                 this.errors = [];
-                var UserId = this.$store.getters.loggeIn
-                if(this.nombres && this.apellidos && this.telefono && this.pais && this.direccion){
-                    let profile = JSON.stringify ({
-                            //user_id': parseInt(UserId.id),
-                            profile:{
-                            'avatar_name': this.imgProfile,
-                            'first_name': this.nombres,
-                            'last_name': this.apellidos,
-                            'country': this.country,
-                            'address': this.direccion,
-                            'description': this.descripcion,
-                            'phone': this.telefono,
-                            'website': 'prueba.web',
-                            'facebook': this.facebook,
-                            }
-                        })
-                    this.$axios.$put('http://35.226.8.87/api/my_profile',profile, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + UserId.accessToken
-                        }
-    
-                    }).then((response) => {
-                        if(response != null){
-                            //alert('Sin errores');
-                             window.location.reload(true)
-                        }
-                    })
-                    .catch((error) => {
-                        if(error){
-                            alert(error);
-                        }
-                    });
-                }else{
-                    if(!this.nombres){
-                        this.errors.push('Nombres requeridos.');
-                    }
-                    if(!this.apellidos){
-                        this.errors.push('Apellidos requeridos.');
-                    }
-                    if(!this.telefono){
-                        this.errors.push('Teléfono requerido.');
-                    }
-                    if(!this.country){
-                        //console.log(this.country);
-                        this.errors.push('País requerido.');
-                    }
-                    if(!this.direccion){
-                        this.errors.push('Dirección requerida.');
-                    }
-                    this.showError = true;
-                }
-            },
-            
-         
-        },
-        created() {
-            let mytokenPromise = this.$store.getters.loggeIn;
-
-            Promise.all([mytokenPromise]).then((vals) => {
-                this.$axios.$get('http://35.226.8.87/api/my_user', {
-                    withCredentials: false,
-                    headers: {
-                        'Authorization': 'Bearer ' + mytokenPromise.accessToken
-                    }
-                }).then(result => {
-                    this.username = result.username
-                    this.userID = result.id;
+                let datosMap = this.getLatandLong(this.linkGoogle);
+                var currentObjl = this;
+                var storeData = this.$store.getters.loggeIn;
+                if(this.slug && this.name && this.address && this.descripcion && this.categoria_id && this.location_id && this.linkGoogle){
+                let listings = JSON.stringify ({
+                    listing: {
+                        'name': this.nombreEstablecimiento,
+                        'address': this.direccionEstablecimiento,
+                        'category_id':this.categoria_id,
+                        'location_id':this.location_id,
+                        'slug': this.slugEstablecimiento,
+                        'description':this.descripcionEstablecimiento,
+                        'latitude': parseFloat(datosMap[1]),
+                        'longitude': parseFloat(datosMap[2]),
+                        'video_youtube': this.videoYoutube,
+                        'opening_hours':this.horarioEstablecimiento,
+                        'user_id': storeData.id
+                    } 
                 });
-            });
-            Promise.all([mytokenPromise]).then((vals) => {
-                console.log(mytokenPromise.accessToken);
-                this.$axios.$get('http://35.226.8.87/api/my_profile', {
-                    withCredentials: false,
+                console.log(listings);
+                console.log(datosMap);
+                
+                this.$axios.$put('http://35.226.8.87/api/listings/'+parseInt(this.getID), listings,{
                     headers: {
-                        
-                        'Authorization': 'Bearer ' + mytokenPromise.accessToken
+                        'Content-Type': 'application/json'      
+                    },
+                })
+                .then((response) => { 
+                    location.reload();
+                    //console.log(this.errors);
+                })
+                .catch((error) => {
+                    this.errors.push('¡Usuario no registrado!');
+                    this.showError = true;
+                    //currentObjl.output = error.response;
+                });
+                
+            }else{
+                if(!this.slug){
+                    this.errors.push('Imagen no encontrada.');
+                }
+                if(!this.name){
+                    this.errors.push('Ingrese el nombre del establecimiento.');
+                }
+                if(!this.direccion){
+                    this.errors.push('Ingrese la dirección del establecimiento.');
+                }
+                if(!this.descripcion){
+                    this.errors.push('Ingrese la descripción del establecimiento.');
+                }
+                if(!this.categoria_id){
+                    this.errors.push('Seleccione una categoría.');
+                }
+                if(!this.location_id){
+                    this.errors.push('Seleccione un distrito.');
+                }
+                if(!this.linkGoogle){
+                    this.errors.push('Ingrese un link válido.');
+                }
+                this.showError = true;
+
+            }   
+        }
+        }, 
+        created() {
+
+            //Datos ID en string
+    this.getID = this.$route.params.id;
+    this.$axios.$get('https://dtodoaqui.xyz/api/listings/'+parseInt(this.getID)).then((response) => {
+        this.datos = response.data;
+        console.log(this.datos);
+        this.markers[0].position.lat = this.datos.latitude;
+        this.markers[0].position.lng = this.datos.longitude;
+        this.userCreador = this.datos.user_id;
+        this.name = this.datos.name;
+        this.openingHours = this.datos.opening_hours;
+        this.slug = this.datos.slug;
+        this.address= this.datos.address;
+        this.linkFacebook = this.datos.video_youtube;
+        this.descripcion = this.datos.description;
+        this.categoria_id = this.datos.category_id;
+        this.location_id = this.datos.location_id;
+        //console.log(this.markers[0].position.lat);
+            this.$axios.$get('https://dtodoaqui.xyz/api/categories/'+this.datos.category_id).then((response) => {
+            this.categoria = response.data.name;
+            //console.log(this.categoria);
+            }).catch((error) => {
+            console.log(error);
+            });
+
+            this.$axios.$get('https://dtodoaqui.xyz/api/location/'+this.datos.location_id).then((response) => {
+            this.location = response.data.name;
+            //console.log(this.location);
+            }).catch((error) => {
+            console.log(error);
+            });
+        }).catch((error) => {
+        
+        console.log(error);
+      });
+
+          /*  let mytokenPromise = this.$store.getters.loggeIn;
+            console.log(this.idEstablecimiento);
+            Promise.all([mytokenPromise]).then((vals) => {
+                this.$axios.$get('http://35.226.8.87/api/listings/'+this.getID, {
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
                 }).then(result => {
                     console.log(result);
-                    if(result == ''){
-                        console.log('jwt' + mytokenPromise.accessToken);
-                        //alert('no hubo data');
-                         let profile = JSON.stringify ({
-                            profile: {
-                            //'user_id': this.userID,
-                            'avatar_name': 'images/empty.png',
-                            'first_name': ' ',
-                            'last_name': ' ',
-                            'country': 'PE',
-                            'address': ' ',
-                            'description': '  ',
-                            'phone': ' ',
-                            'website': ' ',
-                            'facebook': ' ',
-                            //'twitter': 'prueba.twit',
-                            //'linkedin': 'prueba.link',
-                            /*'created': '2019-10-29T20:12:30Z',
-                            'modified': '2019-10-29T20:12:30Z',
-                            'inserted_at': '2019-10-29T20:12:30Z',
-                            'updated_at': '2019-10-29T20:12:30Z',*/
-                        }
-                        })
-                        this.$axios.$post('http://35.226.8.87/api/my_profile',profile, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': 'Bearer ' + mytokenPromise.accessToken
-                        },
-                        
-                    }).then((response) => {
-                        window.location.reload(true)
-                    })
-                    .catch((error) => {
+                }).catch((error) => {
                         console.log(error);
-                    }); 
-                    }else{
-                        this.direccion = result.address;
-                        this.pais = result.country;
-                        this.descripcion = result.description;
-                        this.nombres = result.first_name;
-                        this.apellidos = result.last_name;
-                        this.facebook = result.facebook;
-                        this.telefono = result.phone;
-                        this.idprofile = result.id;
-                        this.imgProfile = result.avatar_name;
-                    }
-                    /**/
-                });
-            });
+                }); 
+            });*/
+    
+        this.$axios.$get('https://dtodoaqui.xyz/api/location').then((response) => {
+        this.distritos = response.data;
+        console.log(this.distritos);
+        }).catch((error) => {
+        
+        console.log(error);
+        });
+
+        this.$axios.$get('https://dtodoaqui.xyz/api/categories').then((response) => {
+        this.categorias = response.data;
+        console.log(this.distritos);
+        }).catch((error) => {
+        
+        console.log(error);
+        });
         },
     }
 </script>
@@ -632,5 +644,19 @@ Vue.use(vueCountryRegionSelect)
     position: absolute;
     bottom: 0;
     left: 57px;
+}
+.subtituloDescp{
+    font-family: 'muli_bold';
+    color:#232323;
+
+}
+#listaCategoriase{
+    padding: 15px;
+    width: 100%;
+    text-align: center;
+    border: 1px solid #232323;
+    border-radius: 25px;
+    color: #232323;
+    outline:none;
 }
 </style>

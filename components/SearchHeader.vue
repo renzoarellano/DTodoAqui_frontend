@@ -81,17 +81,22 @@
                     </div>
                 </div>
                 <div class="col-12 subHeaderBuscador">
-                    <form class="col-12 np">
+                    <form @submit="busquedaAccion" class="col-12 np">
                         <div class="row justify-content-md-center">
-                            <div class="col-12 col-sm-4 padright">
-                                <input class="searchHeaderstyle" type="text" placeholder="Keyword">
+                            <div class="col-12 col-sm-3 padright">
+                                <input v-model="keyword" class="searchHeaderstyle" type="text" placeholder="Keyword">
                             </div>
-                            <div class="col-12 col-sm-4 padright">
-                                <input list="listaDistritos" v-model="distrito"  class="searchHeaderstyle" type="text"  placeholder="Distrito">
-                                <datalist id="listaDistritos" >
-                                <option v-for="distrito in distritos" v-bind:value="distrito.name"  v-bind:label="distrito.name" :key="distrito.name">
-                                </option>
-                                </datalist>
+                            <div class="col-12 col-sm-3 padright">
+                                <select  class="searchHeaderstyle" v-model="distrito">
+                                <option disabled selected  value="">Seleccione un distrito</option>
+                                <option v-for="distrito in distritos"  :value="distrito.id" :key="distrito.id">{{distrito.name}}</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-sm-3 padright">
+                                <select class="searchHeaderstyle" v-model="categoria">
+                                <option disabled selected  value="">Seleccione una categoria</option>
+                                <option v-for="categoria in categorias"  :value="categoria.id" :key="categoria.id">{{categoria.name}}</option>
+                                </select>
                             </div>
                             <div class="col-12 col-sm-1 padfix">
                                 <button class="btnSearchHeader" type="submit">
@@ -155,6 +160,9 @@ export default {
             bte2c: 'bte22c',
             distritos:{},
             distrito: '',
+            categorias:{},
+            categoria:'',
+            keyword:'',
             contador: 0,
             styleSubheader: {
                 marginLeft: '6000px',
@@ -189,6 +197,41 @@ export default {
             //$nuxt.$store.state.accessToken = null;
             $nuxt.$router.push('/inicio_sesion');
         },
+        busquedaAccion(e){
+            e.preventDefault();
+            if(this.keyword && !this.distrito && !this.categoria){
+                $nuxt.$router.push(`/establecimientos?keyword=`+this.keyword);
+                
+            }else if(!this.keyword && this.distrito && !this.categoria){
+                $nuxt.$router.push(`/establecimientos?location=`+parseInt(this.distrito));
+              
+            }else if(!this.keyword && !this.distrito && this.categoria){
+                $nuxt.$router.push(`/establecimientos?categories=`+parseInt(this.categoria));
+                
+            }else if(this.keyword && this.distrito && !this.categoria){
+                $nuxt.$router.push(`/establecimientos?keyword=`+this.keyword+`&`+`location=`+parseInt(this.distrito));
+                
+            }else if(!this.keyword && this.distrito && this.categoria){
+                $nuxt.$router.push(`/establecimientos?location=`+parseInt(this.distrito)+`&`+`categories=`+parseInt(this.categoria));
+                
+            }else if(this.keyword && !this.distrito && this.categoria){
+                $nuxt.$router.push(`/establecimientos?keyword=`+this.keyword+`&`+`categories=`+parseInt(this.categoria));
+                
+            }else if(this.keyword && this.distrito && this.categoria){
+                $nuxt.$router.push(`/establecimientos?keyword=`+this.keyword+`&`+`location=`+parseInt(this.distrito)+`&`+`categories=`+parseInt(this.categoria));
+                
+            }else if(!this.keyword && !this.distrito && !this.categoria){
+                $nuxt.$router.push(`/establecimientos`);
+            }
+
+            this.$axios.$get(linksearch).then((response) => {
+            this.establecimientos = response.data;
+            console.log(this.establecimientos);
+            }).catch((error) => {
+            
+            console.log(error);
+            });
+        },
     },
     computed: {
         loggedIn() {
@@ -199,6 +242,14 @@ export default {
       
          this.$axios.$get('https://dtodoaqui.xyz/api/location').then((response) => {
         this.distritos = response.data;
+        //console.log(this.distritos);
+        }).catch((error) => {
+        
+        console.log(error);
+        });
+
+        this.$axios.$get('https://dtodoaqui.xyz/api/categories').then((response) => {
+        this.categorias = response.data;
         //console.log(this.distritos);
         }).catch((error) => {
         

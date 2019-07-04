@@ -4,13 +4,13 @@
     <Buscador />
     <CategoriasHome />
     <div class="container">
-        <div class="row">
+        <div class="row" style="display:none;">
             <div class="col-xl-12 np titleEstablecimientos">
                 <h1>
                     Establecimientos Destacados
                 </h1>
             </div>
-            <EstablecimientoDestacado />
+           
         </div>
      </div>
     <Footer />

@@ -36,7 +36,8 @@ module.exports = {
   */
   plugins: [
     { src: '~/plugins/country-select', ssr: false },
-    { src: '~/plugins/googleMap', ssr: false }
+    { src: '~/plugins/googleMap.js', ssr: false },
+    
   ],
 
   /*
@@ -62,7 +63,6 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
-    extend(config, ctx) {
-    }
-  }
+   transpile: [/^googleMap($|\/)/]
+}
 }

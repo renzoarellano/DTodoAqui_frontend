@@ -8,7 +8,7 @@
                     </h1>
                 </div>
                 <div class="col-6 col-md-4 col-lg-3 col-xl-3 text-center padCategoria">
-                    <a href="">
+                    <nuxt-link to="/establecimientos?categories=1">
                         <div class="col-12 np">
     
                             <img class="" src="~/assets/hotel.png" alt="">
@@ -19,10 +19,10 @@
                                 Hoteles
                             </h6>
                         </div>
-                    </a>
+                    </nuxt-link>
                 </div>
                 <div class="col-6 col-md-4 col-lg-3 col-xl-3 text-center padCategoria">
-                    <a href="">
+                    <nuxt-link to="/establecimientos?categories=2">
                         <div class="col-12 np">
     
                             <img src="~/assets/food-truck.png" alt="">
@@ -33,10 +33,10 @@
                                 Comida Rápida
                             </h6>
                         </div>
-                    </a>
+                    </nuxt-link>
                 </div>
                 <div class="col-6 col-md-4 col-lg-3 col-xl-3 text-center padCategoria">
-                    <a href="">
+                    <nuxt-link to="/establecimientos?categories=3">
                         <div class="col-12 np">
     
                             <img src="~/assets/restaurant.png" alt="">
@@ -47,10 +47,10 @@
                                 Restaurantes
                             </h6>
                         </div>
-                    </a>
+                    </nuxt-link>
                 </div>
                 <div class="col-6 col-md-4 col-lg-3 col-xl-3 text-center padCategoria">
-                    <a href="">
+                    <nuxt-link to="/establecimientos?categories=4">
                         <div class="col-12 np">
     
                             <img src="~/assets/gym.png" alt="">
@@ -61,7 +61,7 @@
                                 Gimnasios
                             </h6>
                         </div>
-                    </a>
+                    </nuxt-link>
                 </div>
             </div>
         </div>

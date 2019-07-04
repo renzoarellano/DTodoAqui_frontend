@@ -1,6 +1,5 @@
 import Vue from 'vue'
-import * as VueGoogleMaps from 'vue2-google-maps'
- 
+import * as VueGoogleMaps from 'vue2-google-maps' 
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyDp5KNPdk61nBEUyoffHN3lv7Ri33jAkUU',

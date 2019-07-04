@@ -21,10 +21,11 @@
                 <div class="login-form">
                     <div class="group text-center">    
                         <label for="fotoPerfil" class="label">Subir</label>
-                        <input style="display:none" id="fotoPerfil" type="file" class="input" @change="onFotosFile" ref="subirFotos">
+                        <input style="display:none" id="fotoPerfil" type="file" class="input" @change="onFotoEstablecimientoFile" ref="subirFotos">
                         <button class="estiloSubirImg" @click="$refs.subirFotos.click()">
                             Subir Logo
-                        </button>   
+                        </button>
+                        <p v-if="showConfirmacion" class="estiloConfirmacionimagen">Imagen subida correctamente</p>
                     </div>   
                     <form @submit="formRegistroEstablecimiento" enctype="multipart/form-data" autocomplete="off">   
                         <div class="group">
@@ -32,8 +33,22 @@
                            <input id="registroNombreEstablecimiento" v-model="nombreEstablecimiento" type="text" class="input">   
                         </div>
                         <div class="group">
+                            <label for="registroDireccionEstablecimiento" class="label">Dirección (Obligatorio)</label>
+                            <input id="registroDireccionEstablecimiento" v-model="direccionEstablecimiento" type="text" class="input">
+                        </div>
+                        <div class="group" style="margin-top:20px">
+    
+                            <label for="registroDireccionEstablecimiento" class="label">Seleccione una categoría (Obligatorio)</label>
+                            <select id="listaCategorias" v-model="categoria">
+                            <option disabled selected  value="">Seleccione una categoria</option>
+                            <option v-for="categoria in categorias"  :value="categoria.id" :key="categoria.id">{{categoria.name}}</option>
+                            </select>
+                            <!--region-select class="form-control" v-model="region" :country="country" /-->
+                        </div>
+
+                        <div class="group">
                             <label for="registroTelefonoEstablecimiento" class="label">Website o Página de Facebook (Opcional)</label>
-                            <input id="registroTelefonoEstablecimiento" v-model="slugEstablecimiento" type="text" class="input">
+                            <input id="registroTelefonoEstablecimiento" v-model="videoYoutube" type="text" class="input">
                         </div>
     
                         <div class="group">
@@ -41,25 +56,25 @@
                             <input id="registroUrlGoogleMap" v-model="urlGoogle" type="text" class="input">
                         </div>
     
-                        <div class="group">
-                            <label for="registroDireccionEstablecimiento" class="label">Dirección (Obligatorio)</label>
-                            <input id="registroDireccionEstablecimiento" v-model="direccionEstablecimiento" type="text" class="input">
-                        </div>
+                        
     
                         <div class="group" style="margin-top:20px">
     
                             <label for="registroDireccionEstablecimiento" class="label">Ingrese distrito (Obligatorio)</label>
-    
-                            <input list="listaDistritos" v-model="distrito"  class="form-control text-center" type="text"  placeholder="Distrito">
-                            <datalist id="listaDistritos" >
-                            <option v-for="distrito in distritos" v-bind:value="distrito.name"  v-bind:label="distrito.name" :key="distrito.name">
-                            </option>
-                            </datalist>
+                            <select id="listaCategorias" v-model="distrito">
+                            <option disabled selected  value="">Seleccione un distrito</option>
+                            <option v-for="distrito in distritos"  :value="distrito.id" :key="distrito.id">{{distrito.name}}</option>
+                            </select>
     
                             <!--region-select class="form-control" v-model="region" :country="country" /-->
                         </div>
-                        <div class="group" style="margin-top:20px">
-                        
+                        <div class="group">
+                            <label for="registroTelefonoEstablecimiento" class="label">Horario de atención(Obligatorio)</label>
+                            <input id="horarioEstablecimiento" v-model="horarioEstablecimiento" type="text" class="input">
+                        </div>
+                        <div class="group">
+                            <label for="registroDireccionEstablecimiento" class="label">Descripción del Establecimiento</label>
+                            <textarea @change="getdescripcionEstablecimiento" id="registroDescripcionEstablecimiento" cols="30" rows="5" class="input"></textarea>
                         </div>
                   
     
@@ -68,22 +83,10 @@
                                 <label for="registroTelefonoEstablecimiento" class="label">Teléfono</label>
                                 <input id="registroTelefonoEstablecimiento" v-model="telefonoEstablecimiento" type="text" class="input">
                             </div>
-
-                            <div class="group">
-                                <label for="registroDireccionEstablecimiento" class="label">Horario de Atencion</label>
-                                <input id="registroHorarioEstablecimiento" v-model="horarioEstablecimiento" type="text" class="input">
-                            </div>
-
                             <div class="group">
                                 <label for="registroDireccionEstablecimiento" class="label">Correo de Contacto</label>
                                 <input id="registroCorreoEstablecimiento" v-model="correoEstablecimiento" type="email" class="input">
-                            </div>
-
-                            <div class="group">
-                                <label for="registroDireccionEstablecimiento" class="label">Descripción del Establecimiento</label>
-                                <textarea @change="getdescripcionEstablecimiento" id="registroDescripcionEstablecimiento" cols="30" rows="5" class="input"></textarea>
-                            </div>
-    
+                            </div>   
                         </div>
 
                         <div class="group">
@@ -107,6 +110,7 @@
 
 <script>
 import componentMap from '@/components/componentMap.vue';
+
 export default {
     name: 'RegistroEstablecimiento',
     components: {
@@ -115,6 +119,9 @@ export default {
     data() {
         return {
             fotosFile: '',
+            nameProfileImage: '',
+            idprofile : '',
+            showConfirmacion:false,
             nombreEstablecimiento: '',
             telefonoEstablecimiento: '',
             direccionEstablecimiento: '',
@@ -122,7 +129,7 @@ export default {
             correoEstablecimiento: '',
             descripcionEstablecimiento: '',
             slugEstablecimiento: '',
-            distrito: '',
+            videoYoutube:'',
             fotoRespone: 'dato',
             establecimiento: {},
             urlGoogle: '',
@@ -130,6 +137,8 @@ export default {
             errors: [],
             distrito: '',
             distritos: {},
+            categoria:'',
+            categorias:{},
             center: { lat: 45.508, lng: -73.587 },
             markers: [],
             places: [],
@@ -144,10 +153,19 @@ export default {
         
         console.log(error);
         });
+
+        this.$axios.$get('https://dtodoaqui.xyz/api/categories').then((response) => {
+        this.categorias = response.data;
+        console.log(this.distritos);
+        }).catch((error) => {
+        
+        console.log(error);
+        });
         
     },
     mounted() {
         this.geolocate();
+
     },
     methods: {
         setImage(foto) {
@@ -164,18 +182,50 @@ export default {
                 reader.onload = (event) => {
                     this.imgSrc = event.target.result
                     this.fotosFile = this.imgSrc;
-                    console.log(this.fotosFile);
+                    let imageToken = this.$store.getters.loggeIn;
+                    console.log(imageToken);
+                     let images = JSON.stringify ({
+                            image: {
+                            'image_name': this.nameProfileImage,
+                            'image_base64': this.fotosFile,
+                            'entity_id': imageToken.id,
+                            'entity_name': 'profile',
+                            }
+                        });
+                        
+                    //console.log(images);
+                    this.$axios.$post('https://dtodoaqui.xyz/api/upload_image',images, {
+                        headers:{
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + imageToken.accessToken
+                        }
+                    }).then((response) => {
+                        console.log(response);
+                        if(response){
+                            this.slugEstablecimiento = response.data.image_name;
+                            console.log(this.slugEstablecimiento);
+                            this.showConfirmacion = true;
+                        }
+                    });
                 }
                 reader.readAsDataURL(file)
             } else {
                 alert('Sorry, FileReader API not supported')
             }
         },
-        onFotosFile(event) {
+        onFotoEstablecimientoFile(event) {
             this.fotosFile = event.target.files[0];
-            //Activar esta funcion para pasar la imagen a database64 !importante
-            this.setImage(this.fotosFile);
-
+            console.log();
+            var arrayDeCadenas = this.fotosFile.name.split('.');
+            if(arrayDeCadenas[1] == 'png' || arrayDeCadenas[1] == 'jpg'  ){
+                this.nameProfileImage = this.fotosFile.name;
+                this.setImage(this.fotosFile);
+            }else{
+               this.errors.push('Seleccione una imagen con formato: JPG, PNG o GIF');
+               this.showError = true;
+            }
+           //Activar esta funcion para pasar la imagen a database64 !importante
+        
         },
         getLatandLong(url) {
             var urld = url;
@@ -201,35 +251,46 @@ export default {
             //alert(localStorage.getItem('id'));
             e.preventDefault();
             this.errors = [];
-            var datosMap = this.getLatandLong(this.urlGoogle);
-            var slugverificado = this.verifySlug(this.slugEstablecimiento);
-            if (slugverificado == false) {
+            let datosMap = this.getLatandLong(this.urlGoogle);
+            /*var slugverificado = this.verifySlug(this.slugEstablecimiento);
+            if(slugverificado == false) {
                 this.errors.push('Ingrese un link correcto');
                 this.showError = true;
             }else{
                 this.slugEstablecimiento = slugverificado;
             }
-            console.log(this.slugEstablecimiento);
+            console.log(this.slugEstablecimiento);*/
             var currentObjl = this;
             var storeData = this.$store.getters.loggeIn;
-            //console.log(storeData.accessToken);
-            if(this.fotoRespone && this.nombreEstablecimiento && this.urlGoogle && this.direccionEstablecimiento && this.distrito && datosMap){
-                this.$axios.$post('http://35.226.8.87/api/location', {
-                    'location': {
-                        'image_name': 'http://www.cccartagena.org.co/sites/default/files/imagenesbook/tienda.jpg',
+
+            
+            if(this.slugEstablecimiento && this.nombreEstablecimiento && this.direccionEstablecimiento && this.descripcionEstablecimiento && this.categoria && this.urlGoogle  && this.distrito){
+                let listings = JSON.stringify ({
+                    listings: {
                         'name': this.nombreEstablecimiento,
+                        'address': this.direccionEstablecimiento,
+                        'category_id':this.categoria,
+                        'location_id':this.distrito,
                         'slug': this.slugEstablecimiento,
-                        'is_verified': false,
+                        'description':this.descripcionEstablecimiento,
                         'latitude': parseFloat(datosMap[1]),
                         'longitude': parseFloat(datosMap[2]),
-                        'address': this.direccionEstablecimiento,
-                        'district': this.distrito,
-                        'user_id': storeData.id,
-                    }
+                        'video_youtube': this.videoYoutube,
+                        'opening_hours':this.horarioEstablecimiento,
+                        'user_id': storeData.id
+                    } 
+                });
+                console.log(listings);
+                console.log(datosMap);
+                
+                this.$axios.$post('http://35.226.8.87/api/listings', listings,{
+                    headers: {
+                        'Content-Type': 'application/json'      
+                    },
                 })
-                .then(function(response) {
-                    alert('Establecimiento creado');
-                    location.reload();
+                .then((response) => { 
+                    $nuxt.$router.push('/establecimientos');
+                   
                     //console.log(this.errors);
                 })
                 .catch((error) => {
@@ -239,17 +300,33 @@ export default {
                     console.log(currentObjl.output);
                 });
             }else{
-                if(!this.nombreEstablecimiento) {
-                    this.errors.push('Ingrese correctamente el nombre del establecimiento');
+                //console.log(listings);
+                if(!this.slugEstablecimiento) {
+                    this.errors.push('Suba un foto en formato: JPG, PNG o GIF porfavor.');
                 }
-                if(!this.urlGoogle) {
-                    this.errors.push('Ingrese correctamente el link de Google Map');
+                if(!this.nombreEstablecimiento) {
+                    this.errors.push('Ingrese correctamente el nombre del establecimiento.');
                 }
                 if(!this.direccionEstablecimiento) {
-                    this.errors.push('Ingrese correctamente la direccion del establecimiento');
+                    this.errors.push('Ingrese correctamente la direccion del establecimiento.');
+                }
+                if(!this.categoria) {
+                    this.errors.push('Seleccione una categoría.');
+                }
+                if(!this.urlGoogle) {
+                    this.errors.push('Ingrese correctamente el link de Google Map.');
                 }
                 if(!this.distrito) {
-                    this.errors.push('Ingrese correctamente el distrito');
+                    this.errors.push('Ingrese correctamente el distrito.');
+                }
+                if(!this.horarioEstablecimiento) {
+                    this.errors.push('Ingrese su horario de atención.');
+                }
+                if(!this.descripcionEstablecimiento) {
+                    this.errors.push('Ingrese una descripción.');
+                }
+                if(!datosMap) {
+                    this.errors.push('Error de Map.');
                 }
                 
                     this.showError = true;
@@ -366,6 +443,27 @@ export default {
     margin: auto;
     z-index: 999;
     top: 40%;
+}
+
+#listaCategorias{
+    padding: 15px;
+    width: 100%;
+    text-align: center;
+    border: 0px;
+    border-radius: 25px;
+    color: #232323;
+    outline:none;
+}
+.estiloConfirmacionimagen{
+    color:green;
+    text-align: center;
+    font-family: 'muli_semibold';
+    font-size: 16px;
+    background-color:white;
+    padding: 5px 5px 5px 5px;
+    border-radius:25px;
+    margin-top:10px;
+    
 }
 </style>
 

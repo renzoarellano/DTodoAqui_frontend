@@ -2,7 +2,7 @@
     <div class="col-12 np">
         <div class="row">
             <div class="col-12 col-sm-5 np">
-                <img class="img-responsive" :src="imagen" alt="Establecimiento - DtodoAqui">
+                <img class="img-responsive" :src="`https://dtodoaqui.xyz/`+imagen" alt="Establecimiento - DtodoAqui">
             </div>
             <div class="col-12 col-sm-7 text-left">
                 <div class="col-12 titleEstablecimiento">
@@ -52,7 +52,7 @@ import Axios from 'axios';
 export default {
     name: 'Establecimiento',
     props:{
-        id: String,
+        id: Number,
         imagen:String,
         title:String,
         direccion:String,

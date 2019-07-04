@@ -1,9 +1,10 @@
 <template>
-  <div>
-    <SearchHeader />  
-    <BannerEstablecimiento />
+  <div> 
+    <SearchHeader /> 
+    <BannerEstablecimiento /> 
     <div class="container">
       <div class="row">
+         
         <div class="col-12  col-lg-12 col-xl-12">
             <!--Filtro de Busqueda -->
         </div>
@@ -21,13 +22,17 @@
 <script>
 /*eslint-disable */
 // @ is an alias to /src
-import SearchHeader from "@/components/SearchHeader.vue";
+import Buscador from "@/components/Buscador.vue";
 import Footer from "@/components/Footer.vue";
+import Header from "@/components/Header.vue";
+import SearchHeader from "@/components/SearchHeader.vue";
 import BannerEstablecimiento from "@/components/BannerEstablecimiento.vue";
 import Establecimiento from "@/components/Establecimiento.vue";
 export default {
   name: "establecimientos",
   components: {
+    Header,
+    Buscador,
     SearchHeader,
     BannerEstablecimiento,
     Establecimiento,
@@ -35,19 +40,48 @@ export default {
   },
   data(){
     return{
-      keyword:'Ceviche',
+      keyword:'',
       establecimientos:{},
+      distrito:'',
+      categoria:'',
     }
   },
+  mounted(){
+        
+  },
   created(){
-       this.$axios.$get('https://dtodoaqui.xyz/api/listings').then((response) => {
+        var currentUrl = this.$route.query;
+        console.log(currentUrl);
+        this.keyword = currentUrl.keyword;
+        this.distrito = currentUrl.location;
+        this.categoria = currentUrl.categories;
+        var linksearch = '';
+        if(this.keyword && !this.distrito && !this.categoria){
+          linksearch = `https://dtodoaqui.xyz/api/search?keyword=`+this.keyword;
+        }else if(!this.keyword && this.distrito && !this.categoria){
+          linksearch = `https://dtodoaqui.xyz/api/search?location=`+this.distrito;
+        }else if(!this.keyword && !this.distrito && this.categoria){
+            linksearch = `https://dtodoaqui.xyz/api/search?categories=`+this.categoria;
+        }else if(this.keyword && this.distrito && !this.categoria){
+            linksearch = `https://dtodoaqui.xyz/api/search?keyword=`+this.keyword+`&location=`+this.distrito;
+        }else if(!this.keyword && this.distrito && this.categoria){
+            linksearch = `https://dtodoaqui.xyz/api/search?location=`+this.distrito+`&categories=`+this.categoria;
+        }else if(this.keyword && !this.distrito && this.categoria){
+           linksearch = `https://dtodoaqui.xyz/api/search?keyword=`+this.keyword+`&categories=`+this.categoria;
+        }else if(this.keyword && this.distrito && this.categoria){
+            linksearch = `https://dtodoaqui.xyz/api/search?keyword=`+this.keyword+`&location=`+this.distrito+`&categories=`+this.categoria;
+        }else if(!this.keyword && !this.distrito && !this.categoria){
+          linksearch = `https://dtodoaqui.xyz/api/search`;
+        }
+        this.$axios.$get(linksearch).then((response) => {
         this.establecimientos = response.data;
         console.log(this.establecimientos);
         }).catch((error) => {
         
         console.log(error);
         });
-    }
+    },
+
 };
 </script>
 <style>
