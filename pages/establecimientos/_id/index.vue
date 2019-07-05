@@ -231,7 +231,7 @@ methods:{
                 'user_id': parseInt(storeData.id)
             }
             });
-             this.$axios.$post('http://dtodoaqui.xyz/api/reviews', resenas,{
+             this.$axios.$post('https://dtodoaqui.xyz/api/reviews', resenas,{
                     headers: {
                         'Content-Type': 'application/json'      
                     },
