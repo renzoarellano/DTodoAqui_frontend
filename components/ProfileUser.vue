@@ -17,7 +17,7 @@
                     <div class="row">
                         <div class="pictureUser col-12 col-md-6">
                             <div class="col-xs-12 np">
-                                <img class="tamPicture" v-bind:src="'http://35.226.8.87/'+imgProfile" alt="">
+                                <img class="tamPicture" v-bind:src="'https://dtodoaqui.xyz/api/'+imgProfile" alt="">
                             <input style="display:none" id="fotoPerfil" type="file" class="input" @change="onFotoPerfilFile" ref="subirFotoPerfil">
     
                             <button class="estiloSubirFotoProfile" @click="$refs.subirFotoPerfil.click()">
@@ -244,7 +244,7 @@ Vue.use(vueCountryRegionSelect)
                         });
                         console.log(profileImg);
                         let Tokenimage = this.$store.getters.loggeIn;
-                        this.$axios.$put('http://35.226.8.87/api/my_profile',profileImg, {
+                        this.$axios.$put('https://dtodoaqui.xyz/api/my_profile',profileImg, {
                             headers: {
                                 'Content-Type': 'application/json',
                                 'Authorization': 'Bearer ' + Tokenimage.accessToken
@@ -328,7 +328,7 @@ Vue.use(vueCountryRegionSelect)
                             'facebook': this.facebook,
                             }
                         })
-                    this.$axios.$put('http://35.226.8.87/api/my_profile',profile, {
+                    this.$axios.$put('https://dtodoaqui.xyz/api/my_profile',profile, {
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': 'Bearer ' + UserId.accessToken
@@ -372,7 +372,7 @@ Vue.use(vueCountryRegionSelect)
             let mytokenPromise = this.$store.getters.loggeIn;
 
             Promise.all([mytokenPromise]).then((vals) => {
-                this.$axios.$get('http://35.226.8.87/api/my_user', {
+                this.$axios.$get('https://dtodoaqui.xyz/api/my_user', {
                     withCredentials: false,
                     headers: {
                         'Authorization': 'Bearer ' + mytokenPromise.accessToken
@@ -384,7 +384,7 @@ Vue.use(vueCountryRegionSelect)
             });
             Promise.all([mytokenPromise]).then((vals) => {
                 console.log(mytokenPromise.accessToken);
-                this.$axios.$get('http://35.226.8.87/api/my_profile', {
+                this.$axios.$get('https://dtodoaqui.xyz/api/my_profile', {
                     withCredentials: false,
                     headers: {
                         
@@ -415,7 +415,7 @@ Vue.use(vueCountryRegionSelect)
                             'updated_at': '2019-10-29T20:12:30Z',*/
                         }
                         })
-                        this.$axios.$post('http://35.226.8.87/api/my_profile',profile, {
+                        this.$axios.$post('https://dtodoaqui.xyz/api/my_profile',profile, {
                         headers: {
                             'Content-Type': 'application/json',
                             'Authorization': 'Bearer ' + mytokenPromise.accessToken
