@@ -16,16 +16,8 @@
                     </h6>
                 </div>
                 <div class="col ratingEstablecimiento">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="far fa-star"></i>
-                    <i class="far fa-star"></i>
-                    <i class="far fa-star"></i>
-                </div>
-                <div class="col opinionesEstablecimiento">
-                    <p>
-                        <span>4545</span> Opiniones
-                    </p>
+                  Rating: <star-rating :show-rating="false" :text-class="estiloEstrella" :star-size="25" :read-only="true" :rating="rating"></star-rating>
+                    
                 </div>
                 <div class="col-12 keywordEstablecimiento ">
                     <li class="posKeywords" v-for="key in keywords" :key="key.id">
@@ -51,13 +43,19 @@
 import Axios from 'axios';
 export default {
     name: 'Establecimiento',
+    data(){
+        return{
+        boundRating: 0,
+        }
+    },
     props:{
         id: Number,
         imagen:String,
         title:String,
         direccion:String,
         keywords:String,
-        descripcion:String
+        descripcion:String,
+        rating: Number,
     },
     
 }
@@ -69,7 +67,9 @@ export default {
     font-family: 'muli_semibold';
     font-size: 13px;
 }
-
+.opinionesEstablecimiento{
+    margin-top:25px;
+}
 .descripcionEstablecimiento p {
     color: #232323;
     font-family: 'muli_regular';
@@ -78,6 +78,10 @@ export default {
 .posKeywords{
     float:left;
     list-style: none;
+}
+.estiloEstrella{
+    color:#ff1d47;
+
 }
 </style>
 

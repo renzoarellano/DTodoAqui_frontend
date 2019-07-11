@@ -10,7 +10,7 @@
         </div>
         <div class="col-12  col-lg-6 col-xl-6 espacioEstablecimiento" v-for="establecimiento in establecimientos" :key="establecimiento.id" >
             <Establecimiento  :id="establecimiento.id" :imagen="establecimiento.slug"
-            :title="establecimiento.name" :direccion="establecimiento.address" :keywords="keyword" :descripcion="establecimiento.description"/>
+            :title="establecimiento.name" :direccion="establecimiento.address" :keywords="keyword" :descripcion="establecimiento.description" :rating="establecimiento.rating"/>
         </div>
          
       </div>  
@@ -75,7 +75,7 @@ export default {
         }
         this.$axios.$get(linksearch).then((response) => {
         this.establecimientos = response.data;
-        console.log(this.establecimientos);
+        //console.log(this.establecimientos);
         }).catch((error) => {
         
         console.log(error);

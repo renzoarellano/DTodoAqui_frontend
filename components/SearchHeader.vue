@@ -148,6 +148,8 @@
 
 <script>
 /*eslint-disable */
+import axios from 'axios';
+const Cookie = process.client ? require('js-cookie') : undefined
 export default {
     name: 'Header',
     data() {
@@ -192,10 +194,10 @@ export default {
             }
         },
         logout() {
-            localStorage.removeItem('access_token')
-            localStorage.removeItem('id')
-            //$nuxt.$store.state.accessToken = null;
-            $nuxt.$router.push('/inicio_sesion');
+            Cookie.remove('auth')
+            this.$store.commit('setAuth', null)
+            //console.log(this.$store.getters.loggeIn);
+           $nuxt.$router.push('/inicio_sesion');
         },
         busquedaAccion(e){
             e.preventDefault();
@@ -223,7 +225,6 @@ export default {
             }else if(!this.keyword && !this.distrito && !this.categoria){
                 $nuxt.$router.push(`/establecimientos`);
             }
-
             this.$axios.$get(linksearch).then((response) => {
             this.establecimientos = response.data;
             console.log(this.establecimientos);

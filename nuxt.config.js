@@ -37,6 +37,7 @@ module.exports = {
   plugins: [
     { src: '~/plugins/country-select', ssr: false },
     { src: '~/plugins/googleMap.js', ssr: false },
+    { src: '~/plugins/vueRating.js', ssr: false },
     
   ],
 
