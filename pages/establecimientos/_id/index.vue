@@ -24,6 +24,33 @@
     
             </div>
         </div>
+        <div class="container">
+        <div class="row">
+        <div v-if="showSolicitud" class="col-12 col-md-11 col-lg-7 np position-denuncia text-center">
+            
+            <div class="alert alert-success" role="alert">
+                <div class="col-12 np text-right">
+                <button class="btnCerrarErrores" @click="showSolicitud = false">
+    
+                    Cerrar ❌
+    
+                </button>
+            </div>
+                <form @submit="enviarSolicitud">
+                     <div class="group">
+                            
+                            <label for="registroDireccionEstablecimiento" class="label">Describa el motivo por lo cual esta solicitando este establecimiento</label>
+                            <textarea @change="getdescripcionSolicitud" id="registroDescripcionEstablecimiento" cols="30" rows="5" class="input" placeholder="Explicación en menos de 250 carácteres"></textarea>
+                    </div>
+                    <div class="col-12 np text-center group">
+                        <button type="submit" class="button">Registrar solicitud</button>
+                    </div>
+                </form>
+                
+            </div>
+         </div>
+         </div> 
+         </div>  
 
         <div class="container">
         <div class="row">
@@ -59,7 +86,10 @@
             <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                <button v-if="showEditar" class="btn btn-success" @click="editarEstablecimiento">Editar</button>
             </div>
-            <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 text-right">
+            <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3 text-right">
+               <button  class="btn btn-success" @click="solicitarEstablecimiento">Solicitar</button>
+            </div>
+            <div class="col-12 col-sm-6 col-md-3 col-lg-3 col-xl-3 text-right">
                <button  class="btn btn-danger" @click="denunciarEstablecimiento">Denunciar</button>
             </div>
             <div class="col-12 text-center">
@@ -98,6 +128,9 @@
                 </div>
                 <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 ">
                     <p class="datoEstablecimiento">Descripción:<br><span class="resulDatoEstablecimiento">{{datos.description}}</span></p> 
+                    <div class="col ratingEstablecimiento">
+                    Rating: <star-rating :show-rating="false" :star-size="25" :read-only="true"  :rating="rating*5"></star-rating>
+                    </div>
                 </div>
                 </div>
 
@@ -162,6 +195,9 @@ data(){
         showDenuncia:false,
         showEditar:false,
         tituloResena: '',
+        showSolicitud:false,
+        descripcionSolicitud:'',
+        rating:'',
         markers: [
         {position: { lng: 10.2, lat: 10 }}
         ],
@@ -179,7 +215,7 @@ mounted(){
         this.markers[0].position.lng = this.datos.longitude;
         this.userCreador = this.datos.user_id;
         var storeData = this.$store.getters.loggeIn;
-        console.log(this.userCreador);
+        //console.log(this.userCreador);
         this.$axios.$get('https://dtodoaqui.xyz/api/categories/'+this.datos.category_id).then((response) => {
             this.categoria = response.data.name;
             }).catch((error) => {
@@ -191,13 +227,23 @@ mounted(){
             }).catch((error) => {
             console.log(error);
             });
+
+            this.$axios.$get('https://dtodoaqui.xyz/api/listings/'+this.idEstablecimiento+'/rating').then((response) => {
+            this.rating = parseFloat(response.sum);
+            }).catch((error) => {
+            console.log(error);
+            });
         //console.log(storeData);
-        if(storeData.id == parseInt(this.userCreador) && storeData != null){
+        if( storeData != null){
+            if(storeData.id == parseInt(this.userCreador)){
             this.showEditar = true;
+            }else{
+                this.showEditar = false;
+            }
         }else{
             this.showEditar = false;
-            
         }
+        
         //console.log(this.markers[0].position.lat);
         
            
@@ -289,15 +335,19 @@ methods:{
             }else{
                 var storeData = this.$store.getters.loggeIn;
 
-            let denuncia = JSON.stringify ({
+                if(storeData == null){
+                    this.errors.push('¡Usuario no registrado!');
+                    this.showError = true;
+                }else{
+                    let denuncia = JSON.stringify ({
                 report: {
                 'message': this.descripcionDenuncia,
                 'is_approved': false,
                 'listing_id': parseInt(this.idEstablecimiento),
                 'user_id': parseInt(storeData.id)
-            }
-            });
-             this.$axios.$post('https://dtodoaqui.xyz/api/reports', denuncia,{
+                }
+                });
+                 this.$axios.$post('https://dtodoaqui.xyz/api/reports', denuncia,{
                     headers: {
                         'Content-Type': 'application/json'      
                     },
@@ -312,6 +362,57 @@ methods:{
                     //currentObjl.output = error.response;
                     console.log(currentObjl.output);
                 });
+                }
+            }
+    },
+    solicitarEstablecimiento(){
+        this.showSolicitud = true;
+    },
+    getdescripcionSolicitud(){
+        this.descripcionSolicitud = event.target.value
+    },
+    enviarSolicitud(e){
+        e.preventDefault();
+        this.errors =[];
+        e.preventDefault();
+        this.errors=[];
+            if(this.descripcionSolicitud.length > 250){
+                this.errors.push('Su solicitud tiene que ser concisa y menor a 250 carácteres');
+                this.showError = true;
+            }else if(!this.descripcionSolicitud){
+                this.errors.push('Ingrese su solicitud');
+                this.showError = true;
+            }else{
+                var storeData = this.$store.getters.loggeIn;
+
+                if(storeData == null){
+                    this.errors.push('¡Usuario no registrado!');
+                    this.showError = true;
+                }else{
+                    let claim = JSON.stringify ({
+                claim: {
+                'message': this.descripcionSolicitud,
+                'is_approved': false,
+                'listing_id': parseInt(this.idEstablecimiento),
+                'user_id': parseInt(storeData.id)
+                }
+                });
+                 this.$axios.$post('https://dtodoaqui.xyz/api/claims', claim,{
+                    headers: {
+                        'Content-Type': 'application/json'      
+                    },
+                })
+                .then((response) => { 
+                    location.reload();
+                    //console.log(this.errors);
+                })
+                .catch((error) => {
+                    this.errors.push('¡Usuario no registrado!');
+                    this.showError = true;
+                    //currentObjl.output = error.response;
+                    console.log(currentObjl.output);
+                });
+                }
             }
     }
     },

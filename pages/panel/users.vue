@@ -32,18 +32,16 @@
                         <thead>
                             <tr >
                             <th scope="col">#</th>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">ID del Creador</th>
-                            <th scope="col">Rating</th>
+                            <th scope="col">Nickname del Usuario</th>
+                            <th scope="col">Correo</th>
                             <th scope="col">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="establecimiento in establecimientos" :key="establecimiento.id">
                             <th scope="row">{{establecimiento.id}}</th>
-                            <td> {{establecimiento.name}} </td>
-                            <td> {{establecimiento.id}} </td>
-                            <td> {{establecimiento.rating}} </td>
+                            <td> {{establecimiento.username}} </td>
+                            <td> {{establecimiento.email}} </td>
                             <td> <button @click="getIDEstablecimiento" class="btn btn-danger" :value="establecimiento.id">Eliminar</button> </td>
                             </tr>
                         </tbody>
@@ -81,17 +79,9 @@ export default {
         console.log(error);
         });
         }
-        this.$axios.$get('https://dtodoaqui.xyz/api/listings/').then((response) => {
+        this.$axios.$get('https://dtodoaqui.xyz/api/users/').then((response) => {
         this.establecimientos = response.data;
-        
-          this.establecimientos.forEach((item) => {
-            this.$axios.$get(`https://dtodoaqui.xyz/api/listings/`+item.id+`/rating`).then((response) => {
-            item.rating = response.sum;
-           //console.log(item.rating + '-' + item.id);
-          }).catch((error) => {
-          console.log(error);
-          });
-          });
+       
         }).catch((error) => {
         
         console.log(error);
@@ -104,7 +94,7 @@ export default {
         },
         eliminarEstablecimiento(){
             
-            this.$axios.$delete('https://dtodoaqui.xyz/api/listings/'+this.idEstablecimiento).then((response) => {
+            this.$axios.$delete('https://dtodoaqui.xyz/api/users/'+this.idEstablecimiento).then((response) => {
                 location.reload();
                 }).catch((error) => {
                 
@@ -123,4 +113,3 @@ export default {
     
 }
 </style>
-

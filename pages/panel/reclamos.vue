@@ -35,7 +35,8 @@
                             <th scope="col">Mensaje</th>
                             <th scope="col">ID del Creador</th>
                             <th scope="col">ID del Establecimiento</th>
-                            <th scope="col">Acción</th>
+                            <th scope="col">Aceptar</th>
+                            <th scope="col">Eliminar</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -45,6 +46,7 @@
                             <td> {{report.user_id}} </td>
                              <td> {{report.listing_id}} </td>
                             <td> <button @click="getIDReclamo" class="btn btn-success" :value="report.id" :disabled="report.is_approved">Aceptar Reclamo</button> </td>
+                            <td> <button @click="getIDReclamoE" class="btn btn-danger" :value="report.id" :disabled="report.is_approved">Eliminar</button> </td>
                             </tr>
                         </tbody>
                     </table>
@@ -80,6 +82,20 @@ export default {
 
     },
     methods:{
+        getIDReclamoE(e) {
+            this.idReclamo = e.target.value;
+            this.$axios.$delete('https://dtodoaqui.xyz/api/reports/'+this.idReclamo)
+                .then((response) => { 
+                    location.reload();
+                    //console.log(this.errors);
+                })
+                .catch((error) => {
+                    this.errors.push('¡Usuario no registrado!');
+                    this.showError = true;
+                    //currentObjl.output = error.response;
+                    console.log(currentObjl.output);
+                });
+        },
         getIDReclamo(e) {
             this.idReclamo = e.target.value;
             this.showConfirmacion = true;

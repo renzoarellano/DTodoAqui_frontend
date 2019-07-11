@@ -7,17 +7,22 @@
             <div class="col-12 col-md-6 text-right posCerrar">
                 <button @click="logout" class="btn btn-danger">Cerrar Sesión</button>
             </div>
-            <div class="col-12 col-md-4 text-center" >
+            <div class="col-12 col-md-3 text-center" >
                 <nuxt-link class="linkAdmi" to="/panel">
                      Establecimientos
                 </nuxt-link>
             </div>
-            <div class="col-12 col-md-4 text-center" >
+            <div class="col-12 col-md-3 text-center" >
+                <nuxt-link class="linkAdmi" to="/panel/users">
+                     Usuarios
+                </nuxt-link>
+            </div>
+            <div class="col-12 col-md-3 text-center" >
                 <nuxt-link class="linkAdmi" to="/panel/solicitudes">
                      Solicitudes 
                 </nuxt-link>
             </div>
-            <div class="col-12 col-md-4 text-center" >
+            <div class="col-12 col-md-3 text-center" >
                 <nuxt-link class="linkAdmi" to="/panel/reclamos">
                      Reclamos
                 </nuxt-link>
