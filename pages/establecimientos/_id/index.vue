@@ -27,7 +27,7 @@
 
         <div class="container">
         <div class="row">
-        <div v-if="showDenuncia" class="col-12 col-md-11 col-lg-7 np position-alert text-center">
+        <div v-if="showDenuncia" class="col-12 col-md-11 col-lg-7 np position-denuncia text-center">
             
             <div class="alert alert-danger" role="alert">
                 <div class="col-12 np text-right">
@@ -41,7 +41,7 @@
                      <div class="group">
                             
                             <label for="registroDireccionEstablecimiento" class="label">Describa el motivo por lo cual esta denunciando a este establecimiento</label>
-                            <textarea @change="getdescripcionDenuncia" id="registroDescripcionEstablecimiento" cols="30" rows="5" class="input"></textarea>
+                            <textarea @change="getdescripcionDenuncia" id="registroDescripcionEstablecimiento" cols="30" rows="5" class="input" placeholder="Explicación en menos de 250 carácteres"></textarea>
                     </div>
                     <div class="col-12 np text-center group">
                         <button type="submit" class="button">Registrar denuncia</button>
@@ -231,7 +231,6 @@ methods:{
             this.errors.push('La reseña es muy larga, tiene que tener un maximo de 250 carácteres');
             this.showError = true;
         }else if(!this.resenaEstablecimiento ){
-            
             this.errors.push('Ingrese una reseña porfavor!');
             this.showError = true;
         }else{
@@ -279,7 +278,16 @@ methods:{
     enviarDenuncia(e){
         e.preventDefault();
         this.errors =[];
-            if(this.descripcionDenuncia){
+        e.preventDefault();
+        this.errors=[];
+            if(this.descripcionDenuncia.length > 250){
+                this.errors.push('Su denuncia tiene que ser concisa y menor a 250 carácteres');
+                this.showError = true;
+            }
+            if(!this.descripcionDenuncia){
+                this.errors.push('Ingrese su denuncia');
+                this.showError = true;
+            }else{
                 var storeData = this.$store.getters.loggeIn;
 
             let denuncia = JSON.stringify ({
@@ -305,11 +313,6 @@ methods:{
                     //currentObjl.output = error.response;
                     console.log(currentObjl.output);
                 });
-            }else{
-            if(!this.descripcionDenuncia){
-                this.errors.push('Ingrese una reseña ');
-                    this.showError = true;
-            }
             }
     }
     },
@@ -340,13 +343,20 @@ methods:{
     background-color: #fff;
     border-radius: 2px;
     box-shadow: 0 2px 8px 3px;
+    z-index: 999;
     transition: all 0.2s ease-in;
     font-family: Helvetica, Arial, sans-serif;
 }
 .position-alert {
     position: fixed;
     margin: auto;
-    z-index: 999;
+    z-index: 9999;
+    top: 10%;
+}
+.position-denuncia {
+    position: fixed;
+    margin: auto;
+    z-index: 996;
     top: 10%;
 }
 

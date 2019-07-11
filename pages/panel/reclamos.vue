@@ -5,7 +5,7 @@
 
             <div class="col-12 DatosTotales">
                 <div class="col-12 col-md-6">
-                    Total de Establecimientos: {{establecimientos.length}}
+                    Total de Reclamos: {{reports.length}}
                 </div>
             </div>
             <div class="col-12 np espacioTabla">
@@ -14,19 +14,19 @@
                         <thead>
                             <tr>
                             <th scope="col">#</th>
-                            <th scope="col">Nombre</th>
+                            <th scope="col">Mensaje</th>
                             <th scope="col">ID del Creador</th>
-                            <th scope="col">Rating</th>
+                            <th scope="col">ID del Establecimiento</th>
                             <th scope="col">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="establecimiento in establecimientos" :key="establecimiento.id">
-                            <th scope="row">{{establecimiento.id}}</th>
-                            <td> {{establecimiento.name}} </td>
-                            <td> {{establecimiento.id}} </td>
-                            <td> {{establecimiento.rating}} </td>
-                            <td> <button class="btn btn-success" :value="establecimiento.id">Revisar</button> </td>
+                            <tr v-for="report in reports" :key="report.id">
+                            <th scope="row">{{report.id}}</th>
+                            <td> {{report.message}} </td>
+                            <td> {{report.user_id}} </td>
+                             <td> {{report.listing_id}} </td>
+                            <td> <button class="btn btn-success" :value="report.id">Aceptar</button> </td>
                             </tr>
                         </tbody>
                     </table>
@@ -60,3 +60,12 @@ export default {
     }
 }
 </script>
+<style>
+.DatosTotales{
+    margin-top:25px;
+    margin-bottom: 25px;
+    font-size: 20px;
+    font-family: 'muli_semibold';
+    
+}
+</style>
