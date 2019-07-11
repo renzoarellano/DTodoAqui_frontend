@@ -1,6 +1,6 @@
 <template>
-    <section class="zonaEstablecimientos" style="padding-top:130px;">
-        <div class="col-12 backgroundEstablecimientos">
+    <section class="zonaEstablecimientos" style="padding-top:75px;">
+        <div class="col-12 backgroundEstablecimientos" >
             <div class="col-12 np buscadorInicio">
                 <h1 class="tituloSection1 text-center">
                     Busca, Encuentra, Disfruta

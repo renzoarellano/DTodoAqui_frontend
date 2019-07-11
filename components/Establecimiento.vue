@@ -16,7 +16,7 @@
                     </h6>
                 </div>
                 <div class="col ratingEstablecimiento">
-                  Rating: <star-rating :show-rating="false" :star-size="25" :read-only="true" :rating="rating"></star-rating>
+                  Rating: <star-rating :show-rating="false" :star-size="25" :read-only="true" :rating="parseInt(rating)"></star-rating>
                 </div>
                 <div class="col-12 keywordEstablecimiento ">
                     <li class="posKeywords" v-for="key in keywords" :key="key.id">

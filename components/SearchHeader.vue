@@ -80,7 +80,7 @@
                                             </button>
                     </div>
                 </div>
-                <div class="col-12 subHeaderBuscador">
+                <!--div class="col-12 subHeaderBuscador">
                     <form @submit="busquedaAccion" class="col-12 np">
                         <div class="row justify-content-md-center">
                             <div class="col-12 col-sm-3 padright">
@@ -105,7 +105,7 @@
                             </div>
                         </div>
                     </form>
-                </div>
+                </div-->
     
             </div>
         </div>
@@ -224,14 +224,12 @@ export default {
                 
             }else if(!this.keyword && !this.distrito && !this.categoria){
                 $nuxt.$router.push(`/establecimientos`);
+                console.log('haha');
+                this.$forceUpdate();
             }
-            this.$axios.$get(linksearch).then((response) => {
-            this.establecimientos = response.data;
-            console.log(this.establecimientos);
-            }).catch((error) => {
-            
-            console.log(error);
-            });
+             this.$forceUpdate();
+             
+           
         },
     },
     computed: {
