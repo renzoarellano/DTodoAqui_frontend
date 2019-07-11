@@ -6,28 +6,28 @@
 
             <div class="col-12 DatosTotales">
                 <div class="col-12 col-md-6">
-                    Total de Establecimientos: 
+                    Total de Establecimientos: {{establecimientos.length}}
                 </div>
             </div>
             <div class="col-12 np espacioTabla">
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table class="table table-hover text-center">
                         <thead>
                             <tr>
                             <th scope="col">#</th>
                             <th scope="col">Nombre</th>
-                            <th scope="col">Creador</th>
+                            <th scope="col">ID del Creador</th>
                             <th scope="col">Rating</th>
-                            <th scope="col">Rating</th>
+                            <th scope="col">Acción</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
+                            <tr v-for="establecimiento in establecimientos" :key="establecimiento.id">
+                            <th scope="row">{{establecimiento.id}}</th>
+                            <td> {{establecimiento.name}} </td>
+                            <td> {{establecimiento.id}} </td>
+                            <td> {{establecimiento.rating}} </td>
+                            <td> <button class="btn btn-success" :value="establecimiento.id">Revisar</button> </td>
                             </tr>
                         </tbody>
                     </table>
@@ -72,6 +72,10 @@ export default {
 <style scoped>
 .DatosTotales{
     margin-top:25px;
+    margin-bottom: 25px;
+    font-size: 20px;
+    font-family: 'muli_semibold';
+    
 }
 </style>
 

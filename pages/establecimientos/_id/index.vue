@@ -290,7 +290,7 @@ methods:{
                 'user_id': parseInt(storeData.id)
             }
             });
-             this.$axios.$post('http://dtodoaqui.xyz/api/reports', denuncia,{
+             this.$axios.$post('https://dtodoaqui.xyz/api/reports', denuncia,{
                     headers: {
                         'Content-Type': 'application/json'      
                     },

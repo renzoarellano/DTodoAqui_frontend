@@ -1,8 +1,11 @@
 <template>
     <div class="navAdministrador col-12">
         <div class="row">
-             <div class="col-12 text-center">
+             <div class="col-12 col-md-6 text-center">
                 <h1 class="titulo">Bienvenido Administrador</h1>
+            </div>
+            <div class="col-12 col-md-6 text-right posCerrar">
+                <button @click="logout" class="btn btn-danger">Cerrar Sesión</button>
             </div>
             <div class="col-12 col-md-4 text-center" >
                 <nuxt-link class="linkAdmi" to="/panel">
@@ -23,8 +26,17 @@
     </div>
 </template>
 <script>
+const Cookie = process.client ? require('js-cookie') : undefined
 export default {
     name:'NavegadorAdministrador',
+    methods:{
+        logout() {
+            Cookie.remove('auth')
+            this.$store.commit('setAuth', null)
+            //console.log(this.$store.getters.loggeIn);
+           $nuxt.$router.push('/inicio_sesion');
+        }
+    }
     
 }
 </script>
@@ -54,6 +66,9 @@ export default {
     padding: 10px 25px 10px 25px;
     border-radius:25px;
     transition: 0.4s all;
+}
+.posCerrar{
+    margin-top:10px;
 }
 </style>
 
