@@ -1,10 +1,10 @@
 <template>
     <div class="col-12 np">
         <div class="row">
-            <div class="col-12 col-sm-5 np">
+            <div class="col-12 col-sm-6 np">
                 <img class="img-responsive" :src="`https://dtodoaqui.xyz/`+imagen" alt="Establecimiento - DtodoAqui">
             </div>
-            <div class="col-12 col-sm-7 text-left">
+            <div class="col-12 col-sm-6 text-left">
                 <div class="col-12 titleEstablecimiento">
                     <h4>
                         <nuxt-link :to="'establecimientos/'+ id"> {{title}} </nuxt-link>
