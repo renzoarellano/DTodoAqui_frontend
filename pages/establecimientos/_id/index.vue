@@ -39,7 +39,8 @@
             </div>
                 <form @submit="enviarDenuncia">
                      <div class="group">
-                            <label for="registroDireccionEstablecimiento" class="label">Razones por las cuales esta denunciando a este establecimiento</label>
+                            
+                            <label for="registroDireccionEstablecimiento" class="label">Describa el motivo por lo cual esta denunciando a este establecimiento</label>
                             <textarea @change="getdescripcionDenuncia" id="registroDescripcionEstablecimiento" cols="30" rows="5" class="input"></textarea>
                     </div>
                     <div class="col-12 np text-center group">
@@ -90,7 +91,7 @@
             <div class="col-12 espacioDatosEstablecimiento">
                 <div class="row">
                 <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6 ">
-                    <p class="datoEstablecimiento">Dirrecion: <span class="resulDatoEstablecimiento">{{datos.address}}</span></p> 
+                    <p class="datoEstablecimiento">Dirección: <span class="resulDatoEstablecimiento">{{datos.address}}</span></p> 
                     <p class="datoEstablecimiento">Categoría: <span class="resulDatoEstablecimiento">{{categoria}}</span></p> 
                     <p class="datoEstablecimiento">Distrito: <span class="resulDatoEstablecimiento">{{location}}</span></p> 
                     <p class="datoEstablecimiento">Horario de atención: <span class="resulDatoEstablecimiento">{{datos.opening_hours}}</span></p> 
@@ -109,6 +110,7 @@
                 </div>
                <div class="resenaEspace col-12 " v-for="resena in resenaPuestas" :key="resena.id">
                    <p class="datoEstablecimiento">Usuario: <span class="resulDatoEstablecimiento">{{resena.username}}</span></p> 
+                   <p class="datoEstablecimiento">Titulo: <span class="resulDatoEstablecimiento">{{resena.name  }}</span></p> 
                    <div class="col-12">
                        <p class="datoEstablecimiento">Reseña: <span class="resulDatoEstablecimiento">{{resena.description}}</span></p> 
                    </div>
@@ -116,10 +118,12 @@
             </div>
             <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                 <form @submit="formResena" enctype="multipart/form-data" autocomplete="off">
-                    <div class="col">
+                    <div class="col np">
                         <label for="">Ingrese su reseña</label>
                     </div>
-                    <textarea @change="getResena" v-model="resenaEstablecimiento"  id="registroDescripcionEstablecimiento"  class="input"></textarea>
+                    <label for="registroMotivo" class="label">Título:</label>
+                    <input id="tituloResena" v-model="tituloResena" type="text" class="inputTitulo" placeholder="Ingrese un título">
+                    <textarea @change="getResena" v-model="resenaEstablecimiento"  id="registroDescripcionEstablecimiento"  class="input" placeholder="Ingrese hasta 250 carácteres"></textarea>
                 <div class="col text-center" style="margin-top:15px; margin-bottom:15px;">
                      <button type="submit" class="button">Ingresar Reseña</button>
                 </div>
@@ -157,6 +161,7 @@ data(){
         userCreador:'',
         showDenuncia:false,
         showEditar:false,
+        tituloResena: '',
         markers: [
         {position: { lng: 10.2, lat: 10 }}
         ],
@@ -175,14 +180,7 @@ mounted(){
         this.userCreador = this.datos.user_id;
         var storeData = this.$store.getters.loggeIn;
         console.log(this.userCreador);
-        console.log(storeData);
-        if(storeData.id == parseInt(this.userCreador)){
-            this.showEditar = true;
-        }else{
-            this.showEditar = false;
-        }
-        //console.log(this.markers[0].position.lat);
-            this.$axios.$get('https://dtodoaqui.xyz/api/categories/'+this.datos.category_id).then((response) => {
+        this.$axios.$get('https://dtodoaqui.xyz/api/categories/'+this.datos.category_id).then((response) => {
             this.categoria = response.data.name;
             }).catch((error) => {
             console.log(error);
@@ -193,10 +191,22 @@ mounted(){
             }).catch((error) => {
             console.log(error);
             });
+        //console.log(storeData);
+        if(storeData.id == parseInt(this.userCreador) && storeData != null){
+            this.showEditar = true;
+        }else{
+            this.showEditar = false;
+            
+        }
+        //console.log(this.markers[0].position.lat);
+        
+           
         }).catch((error) => {
         
         console.log(error);
         });
+
+         
 
      this.$axios.$get('https://dtodoaqui.xyz/api/listings/'+this.idEstablecimiento+'/reviews').then((response) => {
         this.resenaPuestas = response.data;
@@ -213,25 +223,33 @@ methods:{
     formResena(e){
         e.preventDefault();
         this.errors=[];
-        if(this.resenaEstablecimiento.length > 200){
-            this.errors.push('La reseña es muy larga; tiene que tener un maximo de 200 carácteres');
+        if(!this.tituloResena){
+            this.errors.push('Ingrese un título para su reseña porfavor');
             this.showError = true;
-        }else if(!this.resenaEstablecimiento){
+        }
+        if(this.resenaEstablecimiento.length > 250){
+            this.errors.push('La reseña es muy larga, tiene que tener un maximo de 250 carácteres');
+            this.showError = true;
+        }else if(!this.resenaEstablecimiento ){
+            
             this.errors.push('Ingrese una reseña porfavor!');
             this.showError = true;
         }else{
             var storeData = this.$store.getters.loggeIn;
-
-            let resenas = JSON.stringify ({
+            if(storeData == null){
+                this.errors.push('¡Usuario no registrado!');
+                this.showError = true;
+            }else{
+                let resenas = JSON.stringify ({
                 review: {
                 'description': this.resenaEstablecimiento,
                 'is_published': true,
                 'listing_id': parseInt(this.idEstablecimiento),
-                'name': 'reseña',
+                'name': this.tituloResena,
                 'user_id': parseInt(storeData.id)
-            }
+                }
             });
-             this.$axios.$post('https://dtodoaqui.xyz/api/reviews', resenas,{
+            this.$axios.$post('https://dtodoaqui.xyz/api/reviews', resenas,{
                     headers: {
                         'Content-Type': 'application/json'      
                     },
@@ -246,6 +264,7 @@ methods:{
                     //currentObjl.output = error.response;
                     console.log(currentObjl.output);
                 });
+            } 
         }
     },
     editarEstablecimiento(){
@@ -404,6 +423,14 @@ methods:{
 .h2Resena{
     color:#232323;
     font-family: 'muli_bold';
+}
+.inputTitulo{
+    border:1px solid #232323;
+    width:100%;
+    padding: 5px;
+    border-radius:25px;
+    margin-bottom: 15px;
+    outline: none;
 }
 
 </style>

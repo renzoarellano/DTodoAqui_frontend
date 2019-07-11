@@ -184,6 +184,11 @@ export default {
                     this.fotosFile = this.imgSrc;
                     let imageToken = this.$store.getters.loggeIn;
                     console.log(imageToken);
+                    if(imageToken == null){
+                        this.errors.push('¡Usuario no registrado!');
+                        this.showError = true;
+                    }
+                    
                      let images = JSON.stringify ({
                             image: {
                             'image_name': this.nameProfileImage,
@@ -206,7 +211,10 @@ export default {
                             console.log(this.slugEstablecimiento);
                             this.showConfirmacion = true;
                         }
-                    });
+                    }).catch((error) => {
+                    this.errors.push('¡Usuario no registrado!');
+                    this.showError = true;
+                });
                 }
                 reader.readAsDataURL(file)
             } else {

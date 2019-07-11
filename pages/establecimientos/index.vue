@@ -44,6 +44,7 @@ export default {
       establecimientos:{},
       distrito:'',
       categoria:'',
+      arrayRatings: {},
     }
   },
   mounted(){
@@ -73,13 +74,26 @@ export default {
         }else if(!this.keyword && !this.distrito && !this.categoria){
           linksearch = `https://dtodoaqui.xyz/api/search`;
         }
+        
         this.$axios.$get(linksearch).then((response) => {
         this.establecimientos = response.data;
         //console.log(this.establecimientos);
+          this.establecimientos.forEach((item) => {
+            this.$axios.$get(`https://dtodoaqui.xyz/api/listings/`+item.id+`/rating`).then((response) => {
+            item.rating = response.sum;
+           //console.log(item.rating + '-' + item.id);
+          }).catch((error) => {
+          console.log(error);
+          });
+          });
         }).catch((error) => {
         
         console.log(error);
         });
+
+        
+
+        
     },
 
 };

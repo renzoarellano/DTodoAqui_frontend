@@ -225,6 +225,7 @@ export default {
             }else if(!this.keyword && !this.distrito && !this.categoria){
                 $nuxt.$router.push(`/establecimientos`);
             }
+            let linksearch = ''
             this.$axios.$get(linksearch).then((response) => {
             this.establecimientos = response.data;
             console.log(this.establecimientos);

@@ -94,7 +94,8 @@ const Cookie = process.client ? require('js-cookie') : undefined
                 registrorepassword: '',
                 notificacionLogin: false,
                 errors: [],
-                showError: false
+                showError: false,
+                tipoUsuario: {},
             };
         },
         methods: {
@@ -112,7 +113,7 @@ const Cookie = process.client ? require('js-cookie') : undefined
                                     password_confirmation: this.registrorepassword
                                 }
                             })
-                            .then(function(response) {
+                            .then((response) => {
                                 currentObj.output = response;
                                 console.log(response);
                                 localStorage.token = response.jwt;
@@ -135,11 +136,13 @@ const Cookie = process.client ? require('js-cookie') : undefined
                                 localStorage.setItem('id', localStorage.userid)
                                 setTimeout("location.href='/'", 1000);*/
                             })
-                            .catch(function(error) {
+                            .catch((error) => {
                                 if(error.response.status == 401){
-                                alert('Datos Ingresado NO válidos');
+                                this.errors.push('Cuenta no válida, porfavor regístrese');
+                                this.showError = true;
                                 }else if(error.response.status == 500){
-                                    alert('El servicio no funciona correctamente');
+                                 this.errors.push('El servicio no funciona correctamente, intentelo más tarde');
+                                this.showError = true;
                                 }
                             });
                     } else {
@@ -173,7 +176,7 @@ const Cookie = process.client ? require('js-cookie') : undefined
                             'username': this.username,
                             'password': this.password
                         })
-                        .then(function(response) {
+                        .then((response)=> {
                             //console.log(response);
                             //console.log(response.data.jwt);
                             localStorage.token = response.jwt;
@@ -188,20 +191,33 @@ const Cookie = process.client ? require('js-cookie') : undefined
                             id: localStorage.userid
                             }
 
+                            this.$axios.$get(`https://dtodoaqui.xyz/api/users/`+auth.id).then((response)=> {
+                                this.tipoUsuario = response.data;
+                                console.log(this.tipoUsuario.roles);
+                                if(this.tipoUsuario.roles == 'Administrador'){
+                                    $nuxt.$store.commit('setAuth', auth) // mutating to store for client rendering
+                                    Cookie.set('auth', auth) // saving token in cookie for server rendering
+                                    $nuxt.$router.push('panel/')
+                                }else{
+                                    $nuxt.$store.commit('setAuth', auth) // mutating to store for client rendering
+                                    Cookie.set('auth', auth) // saving token in cookie for server rendering
+                                    $nuxt.$router.push('/')
+                                }
+                            });
                             
-                            $nuxt.$store.commit('setAuth', auth) // mutating to store for client rendering
-                            Cookie.set('auth', auth) // saving token in cookie for server rendering
-                            $nuxt.$router.push('/')
+                        
                            /* localStorage.setItem('access_token', localStorage.token) // store the token in localstorage
                             localStorage.setItem('id', localStorage.userid)
                             $nuxt.$router.push('/inicio');*/
                         })
-                        .catch(function(error) {
-                            if(error.response.status == 401){
-                                alert('Datos Ingresado NO válidos');
-                            }else if(error.response.status == 500){
-                                 alert('El servicio no funciona correctamente');
-                            }
+                        .catch((error) => {
+                             if(error.response.status == 401){
+                                this.errors.push('Cuenta no válida, porfavor regístrese');
+                                this.showError = true;
+                                }else if(error.response.status == 500){
+                                 this.errors.push('El servicio no funciona correctamente, intentelo más tarde');
+                                this.showError = true;
+                                }
                         });
                 }else{
                     if (!this.username) {
