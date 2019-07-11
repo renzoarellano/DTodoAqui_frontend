@@ -283,8 +283,7 @@ methods:{
             if(this.descripcionDenuncia.length > 250){
                 this.errors.push('Su denuncia tiene que ser concisa y menor a 250 carácteres');
                 this.showError = true;
-            }
-            if(!this.descripcionDenuncia){
+            }else if(!this.descripcionDenuncia){
                 this.errors.push('Ingrese su denuncia');
                 this.showError = true;
             }else{
