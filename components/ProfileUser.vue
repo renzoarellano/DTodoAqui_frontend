@@ -17,7 +17,7 @@
                     <div class="row">
                         <div class="pictureUser col-12 col-md-6">
                             <div class="col-xs-12 np">
-                                <img class="tamPicture" v-bind:src="'https://dtodoaqui.xyz/api/'+imgProfile" alt="">
+                                <img class="tamPicture" v-bind:src="'https://dtodoaqui.xyz/'+imgProfile" alt="">
                             <input style="display:none" id="fotoPerfil" type="file" class="input" @change="onFotoPerfilFile" ref="subirFotoPerfil">
     
                             <button class="estiloSubirFotoProfile" @click="$refs.subirFotoPerfil.click()">
