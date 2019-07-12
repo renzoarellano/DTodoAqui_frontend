@@ -8,7 +8,7 @@
                 <div class="col-12 col-sm-6">
                     <ul class="nav-redesFooter">
                         <li>
-                            <a class="color-IconF" href="">
+                            <a class="color-IconF" href="https://drive.google.com/file/d/1SF6OL-jRxDgBpKxbR0f7ChANO1wimgrV/view?usp=sharing">
                                 Descarga nuestra app <img src="~/assets/mobile.png" alt="App Icon - DtodoAqui Web">
                             </a>
                         </li>
