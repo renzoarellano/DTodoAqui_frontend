@@ -70,16 +70,19 @@ export default {
     },
     created(){
         var storeData = this.$store.getters.loggeIn;
+        console.log(storeData);
         if(storeData != null){
         this.$axios.$get('https://dtodoaqui.xyz/api/users/'+ storeData.id).then((response) => {
             this.nameAdministrador = response.data;
             if(this.nameAdministrador.roles != 'Administrador'){
-                $nuxt.$router.push('/')
+                this.$nuxt.$router.push('/')
             }
         }).catch((error) => {
         
         console.log(error);
         });
+        }else{
+            this.$nuxt.$router.push('/')
         }
         this.$axios.$get('https://dtodoaqui.xyz/api/listings/').then((response) => {
         this.establecimientos = response.data;

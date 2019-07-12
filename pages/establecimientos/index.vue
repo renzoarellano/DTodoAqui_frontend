@@ -89,19 +89,19 @@ export default {
             e.preventDefault();
             var linksearch = '';
             if(this.keywordopc && !this.distritoopc && !this.categoriaopc){
-              linksearch = `https://dtodoaqui.xyz/api/search?keywordopc=`+this.keywordopc;
+              linksearch = `https://dtodoaqui.xyz/api/search?keyword=`+this.keywordopc;
             }else if(!this.keywordopc && this.distritoopc && !this.categoriaopc){
               linksearch = `https://dtodoaqui.xyz/api/search?location=`+this.distritoopc;
             }else if(!this.keywordopc && !this.distritoopc && this.categoriaopc){
                 linksearch = `https://dtodoaqui.xyz/api/search?categories=`+this.categoriaopc;
             }else if(this.keywordopc && this.distritoopc && !this.categoriaopc){
-                linksearch = `https://dtodoaqui.xyz/api/search?keywordopc=`+this.keywordopc+`&location=`+this.distritoopc;
+                linksearch = `https://dtodoaqui.xyz/api/search?keyword=`+this.keywordopc+`&location=`+this.distritoopc;
             }else if(!this.keywordopc && this.distritoopc && this.categoriaopc){
                 linksearch = `https://dtodoaqui.xyz/api/search?location=`+this.distritoopc+`&categories=`+this.categoriaopc;
             }else if(this.keywordopc && !this.distritoopc && this.categoriaopc){
-              linksearch = `https://dtodoaqui.xyz/api/search?keywordopc=`+this.keywordopc+`&categories=`+this.categoriaopc;
+              linksearch = `https://dtodoaqui.xyz/api/search?keyword=`+this.keywordopc+`&categories=`+this.categoriaopc;
             }else if(this.keywordopc && this.distritoopc && this.categoriaopc){
-                linksearch = `https://dtodoaqui.xyz/api/search?keywordopc=`+this.keywordopc+`&location=`+this.distritoopc+`&categories=`+this.categoriaopc;
+                linksearch = `https://dtodoaqui.xyz/api/search?keyword=`+this.keywordopc+`&location=`+this.distritoopc+`&categories=`+this.categoriaopc;
             }else if(!this.keywordopc && !this.distritoopc && !this.categoriaopc){
               linksearch = `https://dtodoaqui.xyz/api/search`;
             }

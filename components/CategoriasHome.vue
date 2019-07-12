@@ -8,7 +8,7 @@
                     </h1>
                 </div>
                 <div class="col-6 col-md-4 col-lg-3 col-xl-3 text-center padCategoria">
-                    <nuxt-link to="/establecimientos?categories=1">
+                    <nuxt-link to="/establecimientos?categories=3">
                         <div class="col-12 np">
     
                             <img class="" src="~/assets/hotel.png" alt="">
@@ -36,7 +36,7 @@
                     </nuxt-link>
                 </div>
                 <div class="col-6 col-md-4 col-lg-3 col-xl-3 text-center padCategoria">
-                    <nuxt-link to="/establecimientos?categories=3">
+                    <nuxt-link to="/establecimientos?categories=1">
                         <div class="col-12 np">
     
                             <img src="~/assets/restaurant.png" alt="">
